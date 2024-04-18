@@ -1,0 +1,1851 @@
+[
+    {
+        "id": "7a7483989013a825",
+        "type": "tab",
+        "label": "3.4 Transports",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "0a68722089a07ac4",
+        "type": "inject",
+        "z": "7a7483989013a825",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 280,
+        "y": 140,
+        "wires": [
+            [
+                "c520f9ad032225ce"
+            ]
+        ]
+    },
+    {
+        "id": "2f6aa7e93ded7180",
+        "type": "http request",
+        "z": "7a7483989013a825",
+        "name": "",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "http://10.203.207.88:9003/api/quicktron/rss/warehouse/1/transport-order/carrier/submit",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 770,
+        "y": 140,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "c520f9ad032225ce",
+        "type": "function",
+        "z": "7a7483989013a825",
+        "name": "Message Body",
+        "func": "const randomHex = Math.random().toString(16).slice(2, 10);\nmsg.payload = {\n    \"upstreamOrderNo\": randomHex,\n    \"jobPriority\": 1,\n    \"letDownFlag\": 1,\n    \"rackTypeCode\": \"EURO\",\n    \"startPoint\": \"0072\",\n    \"startMapCode\": \"ZWIB\",\n    \"targetPoint\": \"0032\",\n    \"targetMapCode\": \"ZWIB\"\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 520,
+        "y": 140,
+        "wires": [
+            [
+                "2f6aa7e93ded7180"
+            ]
+        ]
+    },
+    {
+        "id": "d1c659a2c91952db",
+        "type": "inject",
+        "z": "7a7483989013a825",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 280,
+        "y": 280,
+        "wires": [
+            [
+                "c7ec98a9321ff436"
+            ]
+        ]
+    },
+    {
+        "id": "c7ec98a9321ff436",
+        "type": "function",
+        "z": "7a7483989013a825",
+        "name": "SetValues",
+        "func": "\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 520,
+        "y": 280,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "d7f6b43b3f82f8e5",
+        "type": "inject",
+        "z": "7a7483989013a825",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 260,
+        "y": 380,
+        "wires": [
+            [
+                "f7ae1923ade5bd3f"
+            ]
+        ]
+    },
+    {
+        "id": "208fc759f14f472a",
+        "type": "http request",
+        "z": "7a7483989013a825",
+        "name": "",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "http://10.203.207.88:9003/api/quicktron/rss/warehouse/1/carrier/robots/query",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 730,
+        "y": 380,
+        "wires": [
+            [
+                "78417da8beb0ed83"
+            ]
+        ]
+    },
+    {
+        "id": "f3b89af4d0baa75b",
+        "type": "function",
+        "z": "7a7483989013a825",
+        "name": "SetBody",
+        "func": "msg.payload = \n{\n    \"mapCode\":\"ZWIB\"\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 580,
+        "y": 380,
+        "wires": [
+            [
+                "208fc759f14f472a"
+            ]
+        ]
+    },
+    {
+        "id": "78417da8beb0ed83",
+        "type": "split",
+        "z": "7a7483989013a825",
+        "name": "",
+        "splt": "\\n",
+        "spltType": "str",
+        "arraySplt": 1,
+        "arraySpltType": "len",
+        "stream": false,
+        "addname": "",
+        "x": 870,
+        "y": 380,
+        "wires": [
+            [
+                "6d9560a1d7dd1135"
+            ]
+        ]
+    },
+    {
+        "id": "6d9560a1d7dd1135",
+        "type": "split",
+        "z": "7a7483989013a825",
+        "name": "",
+        "splt": "\\n",
+        "spltType": "str",
+        "arraySplt": 1,
+        "arraySpltType": "len",
+        "stream": false,
+        "addname": "",
+        "x": 990,
+        "y": 380,
+        "wires": [
+            [
+                "fde911e73a7ad710"
+            ]
+        ]
+    },
+    {
+        "id": "fde911e73a7ad710",
+        "type": "json",
+        "z": "7a7483989013a825",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 1110,
+        "y": 380,
+        "wires": [
+            [
+                "d121a3d7dbf29f9f"
+            ]
+        ]
+    },
+    {
+        "id": "d121a3d7dbf29f9f",
+        "type": "function",
+        "z": "7a7483989013a825",
+        "name": "SortByRobotCode",
+        "func": "// function compare(a, b) {\n//     if (a.robotCode < b.robotCode) {\n//         return -1;\n//     }\n//     if (a.robotCode > b.robotCode) {\n//         return 1;\n//     }\n//     return 0;\n// }\n\n\n\n// var newArray = msg.payload.data\n// newArray.sort(compare)\nmsg.payload = msg.payload.data\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1290,
+        "y": 380,
+        "wires": [
+            [
+                "12182e90e461f6dd"
+            ]
+        ]
+    },
+    {
+        "id": "3f0d3822983e50bd",
+        "type": "switch",
+        "z": "7a7483989013a825",
+        "name": "",
+        "property": "payload.robotCode",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "Robot_1",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "Robot_2",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "Robot_3",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "Robot_4",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "Robot_5",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "Robot_6",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 6,
+        "x": 1770,
+        "y": 380,
+        "wires": [
+            [
+                "60139aebe37f349f"
+            ],
+            [
+                "fc83a4b2d2ce745c"
+            ],
+            [
+                "5a5df5b679cbec6d"
+            ],
+            [
+                "84d440311cdb7c0f"
+            ],
+            [
+                "22be30a0133965bc"
+            ],
+            [
+                "2cc20e8f5a4eb0b5"
+            ]
+        ]
+    },
+    {
+        "id": "79294be69713e01c",
+        "type": "ui_text",
+        "z": "7a7483989013a825",
+        "group": "e066e74738ef933c",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "name": "Vehicle1",
+        "label": "",
+        "format": "{{msg.payload.robotCode}} - {{msg.payload.state}}",
+        "layout": "col-center",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 2300,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "273a54d8c5f7777d",
+        "type": "split",
+        "z": "7a7483989013a825",
+        "name": "",
+        "splt": "\\n",
+        "spltType": "str",
+        "arraySplt": 1,
+        "arraySpltType": "len",
+        "stream": false,
+        "addname": "",
+        "x": 1610,
+        "y": 380,
+        "wires": [
+            [
+                "3f0d3822983e50bd"
+            ]
+        ]
+    },
+    {
+        "id": "12182e90e461f6dd",
+        "type": "sort",
+        "z": "7a7483989013a825",
+        "name": "",
+        "order": "ascending",
+        "as_num": false,
+        "target": "payload",
+        "targetType": "msg",
+        "msgKey": "payload",
+        "msgKeyType": "elem",
+        "seqKey": "payload",
+        "seqKeyType": "msg",
+        "x": 1450,
+        "y": 380,
+        "wires": [
+            [
+                "273a54d8c5f7777d"
+            ]
+        ]
+    },
+    {
+        "id": "9d388160206bc011",
+        "type": "ui_text",
+        "z": "7a7483989013a825",
+        "group": "b75df571b1f857a9",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "name": "Vehicle2",
+        "label": "",
+        "format": "{{msg.payload.robotCode}} - {{msg.payload.state}}",
+        "layout": "row-left",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 2300,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "390ac721d30f41b5",
+        "type": "ui_text",
+        "z": "7a7483989013a825",
+        "group": "4b5d8fe7e4ebb5f6",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "name": "Vehicle3",
+        "label": "",
+        "format": "{{msg.payload.robotCode}} - {{msg.payload.state}}",
+        "layout": "row-left",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 2320,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "9180ec0f63feff65",
+        "type": "ui_text",
+        "z": "7a7483989013a825",
+        "group": "8aad3309eeadb1b9",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "name": "Vehicle4",
+        "label": "",
+        "format": "{{msg.payload.robotCode}} - {{msg.payload.state}}",
+        "layout": "row-left",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 2320,
+        "y": 520,
+        "wires": []
+    },
+    {
+        "id": "a87bb35e7a7dac58",
+        "type": "ui_text",
+        "z": "7a7483989013a825",
+        "group": "29b3add2b81dcd88",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "name": "Vehicle5",
+        "label": "",
+        "format": "{{msg.payload.robotCode}} - {{msg.payload.state}}",
+        "layout": "row-left",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 2300,
+        "y": 640,
+        "wires": []
+    },
+    {
+        "id": "2b8dc77976ebcd5b",
+        "type": "ui_text",
+        "z": "7a7483989013a825",
+        "group": "863de7a8a722fb80",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "name": "Vehicle6",
+        "label": "",
+        "format": "{{msg.payload.robotCode}} - {{msg.payload.state}}",
+        "layout": "row-left",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 2320,
+        "y": 780,
+        "wires": []
+    },
+    {
+        "id": "9a0afe7b335a4b18",
+        "type": "ui_template",
+        "z": "7a7483989013a825",
+        "group": "389d10ad69c6be87",
+        "name": "StandardTableTemplate",
+        "order": 4,
+        "width": 0,
+        "height": 0,
+        "format": "<div style=\"padding: 20px; width: 300px;\">\n    <style>\n        table {\n            width: 100%;\n            border-collapse: collapse;\n            margin-bottom: 20px;\n        }\n\n        th,\n        td {\n            border: 1px solid #ddd;\n            padding: 8px;\n            text-align: left;\n        }\n\n        th {\n            background-color: #f2f2f2;\n        }\n\n        ul {\n            list-style-type: none;\n            padding: 0;\n        }\n\n        li {\n            margin-bottom: 5px;\n        }\n\n        h3 {\n            margin-top: 0;\n        }\n    </style>\n    <table style=\"width:200px\">\n        <tr>\n            <th>Robot Code</th>\n            <th>State</th>\n            <th>Power</th>\n            <th>Map Code</th>\n            <th>Point Code</th>\n            <th>Position (x, y)</th>\n            <th>Errorcodes</th>\n        </tr>\n        <tr ng-repeat=\"item in msg.payload\">\n            <td>{{item.robotCode}}</td>\n            <td>{{item.state}}</td>\n            <td>{{item.power}}%</td>\n            <td>{{item.mapCode}}</td>\n            <td>{{item.pointCode}}</td>\n            <td>{{item.x}} - {{item.y}}</td>\n            <td>\n        <ul>\n            <li ng-repeat=\"errorCode in msg.payload[0].errorCodes\">{{errorCode}}</li>\n        </ul>\n            </td>\n        </tr>\n    </table>\n\n\n</div>\n",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 1590,
+        "y": 180,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "60139aebe37f349f",
+        "type": "function",
+        "z": "7a7483989013a825",
+        "name": "1",
+        "func": "\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2030,
+        "y": 160,
+        "wires": [
+            [
+                "79294be69713e01c",
+                "47197d08c4bf5570",
+                "ac73136ed93fe789"
+            ]
+        ]
+    },
+    {
+        "id": "fc83a4b2d2ce745c",
+        "type": "function",
+        "z": "7a7483989013a825",
+        "name": "2",
+        "func": "\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2050,
+        "y": 320,
+        "wires": [
+            [
+                "9d388160206bc011",
+                "b03a9a54aa1bfc49",
+                "f2b3541b70a1c1e4"
+            ]
+        ]
+    },
+    {
+        "id": "5a5df5b679cbec6d",
+        "type": "function",
+        "z": "7a7483989013a825",
+        "name": "3",
+        "func": "\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2090,
+        "y": 440,
+        "wires": [
+            [
+                "390ac721d30f41b5",
+                "0171e2bd2362cba2",
+                "a35ca046ac1623eb"
+            ]
+        ]
+    },
+    {
+        "id": "84d440311cdb7c0f",
+        "type": "function",
+        "z": "7a7483989013a825",
+        "name": "4",
+        "func": "\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2090,
+        "y": 560,
+        "wires": [
+            [
+                "9180ec0f63feff65",
+                "82afefb9a9f15233",
+                "fce0769095d7e50c"
+            ]
+        ]
+    },
+    {
+        "id": "22be30a0133965bc",
+        "type": "function",
+        "z": "7a7483989013a825",
+        "name": "5",
+        "func": "\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2090,
+        "y": 660,
+        "wires": [
+            [
+                "a87bb35e7a7dac58",
+                "8a8010fa85ed0f01",
+                "63b41f52b343b6e2"
+            ]
+        ]
+    },
+    {
+        "id": "2cc20e8f5a4eb0b5",
+        "type": "function",
+        "z": "7a7483989013a825",
+        "name": "6",
+        "func": "\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2090,
+        "y": 800,
+        "wires": [
+            [
+                "2b8dc77976ebcd5b",
+                "2ecc864e9a4e84df",
+                "5f30b04e0db2ff67"
+            ]
+        ]
+    },
+    {
+        "id": "47197d08c4bf5570",
+        "type": "ui_gauge",
+        "z": "7a7483989013a825",
+        "name": "",
+        "group": "e066e74738ef933c",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "gtype": "donut",
+        "title": "",
+        "label": "Power",
+        "format": "{{msg.payload.power}}%",
+        "min": "0",
+        "max": "100",
+        "colors": [
+            "#ca3838",
+            "#e6e600",
+            "#00b400"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 2430,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "b03a9a54aa1bfc49",
+        "type": "ui_gauge",
+        "z": "7a7483989013a825",
+        "name": "",
+        "group": "b75df571b1f857a9",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "gtype": "donut",
+        "title": "",
+        "label": "Power",
+        "format": "{{msg.payload.power}}%",
+        "min": "0",
+        "max": "100",
+        "colors": [
+            "#ca3838",
+            "#e6e600",
+            "#00b400"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 2430,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "0171e2bd2362cba2",
+        "type": "ui_gauge",
+        "z": "7a7483989013a825",
+        "name": "",
+        "group": "4b5d8fe7e4ebb5f6",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "gtype": "donut",
+        "title": "",
+        "label": "Power",
+        "format": "{{msg.payload.power}}%",
+        "min": "0",
+        "max": "100",
+        "colors": [
+            "#ca3838",
+            "#e6e600",
+            "#00b400"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 2470,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "82afefb9a9f15233",
+        "type": "ui_gauge",
+        "z": "7a7483989013a825",
+        "name": "",
+        "group": "8aad3309eeadb1b9",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "gtype": "donut",
+        "title": "",
+        "label": "Power",
+        "format": "{{msg.payload.power}}%",
+        "min": "0",
+        "max": "100",
+        "colors": [
+            "#ca3838",
+            "#e6e600",
+            "#00b400"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 2470,
+        "y": 520,
+        "wires": []
+    },
+    {
+        "id": "8a8010fa85ed0f01",
+        "type": "ui_gauge",
+        "z": "7a7483989013a825",
+        "name": "",
+        "group": "29b3add2b81dcd88",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "gtype": "donut",
+        "title": "",
+        "label": "Power",
+        "format": "{{msg.payload.power}}%",
+        "min": "0",
+        "max": "100",
+        "colors": [
+            "#ca3838",
+            "#e6e600",
+            "#00b400"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 2450,
+        "y": 640,
+        "wires": []
+    },
+    {
+        "id": "2ecc864e9a4e84df",
+        "type": "ui_gauge",
+        "z": "7a7483989013a825",
+        "name": "",
+        "group": "863de7a8a722fb80",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "gtype": "donut",
+        "title": "",
+        "label": "Power",
+        "format": "{{msg.payload.power}}%",
+        "min": "0",
+        "max": "100",
+        "colors": [
+            "#ca3838",
+            "#e6e600",
+            "#00b400"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 2470,
+        "y": 780,
+        "wires": []
+    },
+    {
+        "id": "ac73136ed93fe789",
+        "type": "ui_template",
+        "z": "7a7483989013a825",
+        "group": "e066e74738ef933c",
+        "name": "",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "format": "<div style=\"padding: 20px;\">\n    <div style=\"border: 1px solid #ccc; border-radius: 5px; padding: 10px; background-color: #f9f9f9;\">\n        <p><strong>X Position:</strong> {{msg.payload.x}}</p>\n        <p><strong>Y Position:</strong> {{msg.payload.y}}</p>\n        <p><strong>Point Code:</strong> {{msg.payload.pointCode}}</p>\n    </div>\n</div>",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 2560,
+        "y": 100,
+        "wires": [
+            [
+                "780d01782c9db2af"
+            ]
+        ]
+    },
+    {
+        "id": "f2b3541b70a1c1e4",
+        "type": "ui_template",
+        "z": "7a7483989013a825",
+        "group": "b75df571b1f857a9",
+        "name": "",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "format": "<div style=\"padding: 20px;\">\n    <div style=\"border: 1px solid #ccc; border-radius: 5px; padding: 10px; background-color: #f9f9f9;\">\n        <p><strong>X Position:</strong> {{msg.payload.x}}</p>\n        <p><strong>Y Position:</strong> {{msg.payload.y}}</p>\n        <p><strong>Point Code:</strong> {{msg.payload.pointCode}}</p>\n    </div>\n</div>",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 2580,
+        "y": 220,
+        "wires": [
+            [
+                "f12ba654f24ea11b"
+            ]
+        ]
+    },
+    {
+        "id": "a35ca046ac1623eb",
+        "type": "ui_template",
+        "z": "7a7483989013a825",
+        "group": "4b5d8fe7e4ebb5f6",
+        "name": "",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "format": "<div style=\"padding: 20px;\">\n    <div style=\"border: 1px solid #ccc; border-radius: 5px; padding: 10px; background-color: #f9f9f9;\">\n        <p><strong>X Position:</strong> {{msg.payload.x}}</p>\n        <p><strong>Y Position:</strong> {{msg.payload.y}}</p>\n        <p><strong>Point Code:</strong> {{msg.payload.pointCode}}</p>\n    </div>\n</div>",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 2600,
+        "y": 380,
+        "wires": [
+            [
+                "4aacc2e0db9ab027"
+            ]
+        ]
+    },
+    {
+        "id": "fce0769095d7e50c",
+        "type": "ui_template",
+        "z": "7a7483989013a825",
+        "group": "8aad3309eeadb1b9",
+        "name": "",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "format": "<div style=\"padding: 20px;\">\n    <div style=\"border: 1px solid #ccc; border-radius: 5px; padding: 10px; background-color: #f9f9f9;\">\n        <p><strong>X Position:</strong> {{msg.payload.x}}</p>\n        <p><strong>Y Position:</strong> {{msg.payload.y}}</p>\n        <p><strong>Point Code:</strong> {{msg.payload.pointCode}}</p>\n    </div>\n</div>",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 2620,
+        "y": 520,
+        "wires": [
+            [
+                "0f4cb308881a044e"
+            ]
+        ]
+    },
+    {
+        "id": "63b41f52b343b6e2",
+        "type": "ui_template",
+        "z": "7a7483989013a825",
+        "group": "29b3add2b81dcd88",
+        "name": "",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "format": "<div style=\"padding: 20px;\">\n    <div style=\"border: 1px solid #ccc; border-radius: 5px; padding: 10px; background-color: #f9f9f9;\">\n        <p><strong>X Position:</strong> {{msg.payload.x}}</p>\n        <p><strong>Y Position:</strong> {{msg.payload.y}}</p>\n        <p><strong>Point Code:</strong> {{msg.payload.pointCode}}</p>\n    </div>\n</div>",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 2600,
+        "y": 640,
+        "wires": [
+            [
+                "c03f86a5a66f58e2"
+            ]
+        ]
+    },
+    {
+        "id": "5f30b04e0db2ff67",
+        "type": "ui_template",
+        "z": "7a7483989013a825",
+        "group": "863de7a8a722fb80",
+        "name": "",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "format": "<div style=\"padding: 20px;\">\n    <div style=\"border: 1px solid #ccc; border-radius: 5px; padding: 10px; background-color: #f9f9f9;\">\n        <p><strong>X Position:</strong> {{msg.payload.x}}</p>\n        <p><strong>Y Position:</strong> {{msg.payload.y}}</p>\n        <p><strong>Point Code:</strong> {{msg.payload.pointCode}}</p>\n    </div>\n</div>",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 2620,
+        "y": 780,
+        "wires": [
+            [
+                "146e04af54cd8b97"
+            ]
+        ]
+    },
+    {
+        "id": "1e8806b22271f206",
+        "type": "ui_button",
+        "z": "7a7483989013a825",
+        "name": "",
+        "group": "80df0dcc5ce87836",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "label": "Pause Vehicles",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "BigButton",
+        "icon": "",
+        "payload": "",
+        "payloadType": "str",
+        "topic": "topic",
+        "topicType": "msg",
+        "x": 760,
+        "y": 580,
+        "wires": [
+            [
+                "96ecb926277ebdde"
+            ]
+        ]
+    },
+    {
+        "id": "e8ddfb1622ed6ca9",
+        "type": "http request",
+        "z": "7a7483989013a825",
+        "name": "",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "http://10.203.207.88:9003/api/quicktron/rcs/job/pause",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 1110,
+        "y": 580,
+        "wires": [
+            [
+                "2d22809e403c7b49"
+            ]
+        ]
+    },
+    {
+        "id": "96ecb926277ebdde",
+        "type": "function",
+        "z": "7a7483989013a825",
+        "name": "function 122",
+        "func": "msg.payload ={\n    \"paused\": true\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 930,
+        "y": 520,
+        "wires": [
+            [
+                "e8ddfb1622ed6ca9"
+            ]
+        ]
+    },
+    {
+        "id": "2d22809e403c7b49",
+        "type": "debug",
+        "z": "7a7483989013a825",
+        "name": "debug 71",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1300,
+        "y": 580,
+        "wires": []
+    },
+    {
+        "id": "3bbc56512067a5a9",
+        "type": "function",
+        "z": "7a7483989013a825",
+        "name": "function 123",
+        "func": "msg.payload ={\n    \"paused\": false\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 930,
+        "y": 640,
+        "wires": [
+            [
+                "e8ddfb1622ed6ca9"
+            ]
+        ]
+    },
+    {
+        "id": "9a8e5566021bb862",
+        "type": "ui_button",
+        "z": "7a7483989013a825",
+        "name": "",
+        "group": "80df0dcc5ce87836",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "label": "Start vehicles",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "BigButton",
+        "icon": "",
+        "payload": "",
+        "payloadType": "str",
+        "topic": "topic",
+        "topicType": "msg",
+        "x": 760,
+        "y": 640,
+        "wires": [
+            [
+                "3bbc56512067a5a9"
+            ]
+        ]
+    },
+    {
+        "id": "048c71056f1abe23",
+        "type": "inject",
+        "z": "7a7483989013a825",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 280,
+        "y": 580,
+        "wires": [
+            [
+                "1e8806b22271f206",
+                "9a8e5566021bb862"
+            ]
+        ]
+    },
+    {
+        "id": "780d01782c9db2af",
+        "type": "ui_form",
+        "z": "7a7483989013a825",
+        "name": "",
+        "label": "Robot 1 Move",
+        "group": "e066e74738ef933c",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "options": [
+            {
+                "label": "Start Point",
+                "value": "StartPoint",
+                "type": "text",
+                "required": true,
+                "rows": null
+            },
+            {
+                "label": "End Point",
+                "value": "EndPoint",
+                "type": "text",
+                "required": true,
+                "rows": null
+            }
+        ],
+        "formValue": {
+            "StartPoint": "",
+            "EndPoint": ""
+        },
+        "payload": "",
+        "submit": "Start Move",
+        "cancel": "",
+        "topic": "topic",
+        "topicType": "msg",
+        "splitLayout": "",
+        "className": "",
+        "x": 2760,
+        "y": 100,
+        "wires": [
+            [
+                "ea179ceff43a1216"
+            ]
+        ]
+    },
+    {
+        "id": "27918e38704afd34",
+        "type": "http request",
+        "z": "7a7483989013a825",
+        "name": "",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "http://10.203.207.88:9003/api/quicktron/rss/warehouse/1/transport-order/carrier/submit",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 3170,
+        "y": 100,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "ea179ceff43a1216",
+        "type": "function",
+        "z": "7a7483989013a825",
+        "name": "Message Body",
+        "func": "const randomHex = Math.random().toString(16).slice(2, 10);\nmsg.payload = {\n    \"upstreamOrderNo\": randomHex,\n    \"jobPriority\": 1,\n    \"letDownFlag\": 1,\n    \"rackTypeCode\": \"EURO\",\n    \"startPoint\": msg.payload.StartPoint,\n    \"startMapCode\": \"ZWIB\",\n    \"targetPoint\": msg.payload.EndPoint,\n    \"targetMapCode\": \"ZWIB\",\n    \"robotCode\": \"Robot_1\"\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2940,
+        "y": 100,
+        "wires": [
+            [
+                "27918e38704afd34"
+            ]
+        ]
+    },
+    {
+        "id": "f12ba654f24ea11b",
+        "type": "ui_form",
+        "z": "7a7483989013a825",
+        "name": "",
+        "label": "Robot 2 Move",
+        "group": "b75df571b1f857a9",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "options": [
+            {
+                "label": "Start Point",
+                "value": "StartPoint",
+                "type": "text",
+                "required": true,
+                "rows": null
+            },
+            {
+                "label": "End Point",
+                "value": "EndPoint",
+                "type": "text",
+                "required": true,
+                "rows": null
+            }
+        ],
+        "formValue": {
+            "StartPoint": "",
+            "EndPoint": ""
+        },
+        "payload": "",
+        "submit": "Start Move",
+        "cancel": "",
+        "topic": "topic",
+        "topicType": "msg",
+        "splitLayout": "",
+        "className": "",
+        "x": 2760,
+        "y": 220,
+        "wires": [
+            [
+                "6d66e29bcdd0eda6"
+            ]
+        ]
+    },
+    {
+        "id": "c4a8c4bec7ad0f34",
+        "type": "http request",
+        "z": "7a7483989013a825",
+        "name": "",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "http://10.203.207.88:9003/api/quicktron/rss/warehouse/1/transport-order/carrier/submit",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 3170,
+        "y": 220,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "6d66e29bcdd0eda6",
+        "type": "function",
+        "z": "7a7483989013a825",
+        "name": "Message Body",
+        "func": "const randomHex = Math.random().toString(16).slice(2, 10);\nmsg.payload = {\n    \"upstreamOrderNo\": randomHex,\n    \"jobPriority\": 1,\n    \"letDownFlag\": 1,\n    \"rackTypeCode\": \"EURO\",\n    \"startPoint\": msg.payload.StartPoint,\n    \"startMapCode\": \"ZWIB\",\n    \"targetPoint\": msg.payload.EndPoint,\n    \"targetMapCode\": \"ZWIB\",\n    \"robotCode\": \"Robot_2\"\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2940,
+        "y": 220,
+        "wires": [
+            [
+                "c4a8c4bec7ad0f34"
+            ]
+        ]
+    },
+    {
+        "id": "4aacc2e0db9ab027",
+        "type": "ui_form",
+        "z": "7a7483989013a825",
+        "name": "",
+        "label": "Robot 3 Move",
+        "group": "4b5d8fe7e4ebb5f6",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "options": [
+            {
+                "label": "Start Point",
+                "value": "StartPoint",
+                "type": "text",
+                "required": true,
+                "rows": null
+            },
+            {
+                "label": "End Point",
+                "value": "EndPoint",
+                "type": "text",
+                "required": true,
+                "rows": null
+            }
+        ],
+        "formValue": {
+            "StartPoint": "",
+            "EndPoint": ""
+        },
+        "payload": "",
+        "submit": "Start Move",
+        "cancel": "",
+        "topic": "topic",
+        "topicType": "msg",
+        "splitLayout": "",
+        "className": "",
+        "x": 2800,
+        "y": 380,
+        "wires": [
+            [
+                "43817cbe9bb70a1d"
+            ]
+        ]
+    },
+    {
+        "id": "651a31d1d3629d4a",
+        "type": "http request",
+        "z": "7a7483989013a825",
+        "name": "",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "http://10.203.207.88:9003/api/quicktron/rss/warehouse/1/transport-order/carrier/submit",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 3210,
+        "y": 380,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "43817cbe9bb70a1d",
+        "type": "function",
+        "z": "7a7483989013a825",
+        "name": "Message Body",
+        "func": "const randomHex = Math.random().toString(16).slice(2, 10);\nmsg.payload = {\n    \"upstreamOrderNo\": randomHex,\n    \"jobPriority\": 1,\n    \"letDownFlag\": 1,\n    \"rackTypeCode\": \"EURO\",\n    \"startPoint\": msg.payload.StartPoint,\n    \"startMapCode\": \"ZWIB\",\n    \"targetPoint\": msg.payload.EndPoint,\n    \"targetMapCode\": \"ZWIB\",\n    \"robotCode\": \"Robot_3\"\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2980,
+        "y": 380,
+        "wires": [
+            [
+                "651a31d1d3629d4a"
+            ]
+        ]
+    },
+    {
+        "id": "0f4cb308881a044e",
+        "type": "ui_form",
+        "z": "7a7483989013a825",
+        "name": "",
+        "label": "Robot 4 Move",
+        "group": "8aad3309eeadb1b9",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "options": [
+            {
+                "label": "Start Point",
+                "value": "StartPoint",
+                "type": "text",
+                "required": true,
+                "rows": null
+            },
+            {
+                "label": "End Point",
+                "value": "EndPoint",
+                "type": "text",
+                "required": true,
+                "rows": null
+            }
+        ],
+        "formValue": {
+            "StartPoint": "",
+            "EndPoint": ""
+        },
+        "payload": "",
+        "submit": "Start Move",
+        "cancel": "",
+        "topic": "topic",
+        "topicType": "msg",
+        "splitLayout": "",
+        "className": "",
+        "x": 2820,
+        "y": 520,
+        "wires": [
+            [
+                "93ae57a2b62934c7"
+            ]
+        ]
+    },
+    {
+        "id": "f13c3365f10cf7d9",
+        "type": "http request",
+        "z": "7a7483989013a825",
+        "name": "",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "http://10.203.207.88:9003/api/quicktron/rss/warehouse/1/transport-order/carrier/submit",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 3230,
+        "y": 520,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "93ae57a2b62934c7",
+        "type": "function",
+        "z": "7a7483989013a825",
+        "name": "Message Body",
+        "func": "const randomHex = Math.random().toString(16).slice(2, 10);\nmsg.payload = {\n    \"upstreamOrderNo\": randomHex,\n    \"jobPriority\": 1,\n    \"letDownFlag\": 1,\n    \"rackTypeCode\": \"EURO\",\n    \"startPoint\": msg.payload.StartPoint,\n    \"startMapCode\": \"ZWIB\",\n    \"targetPoint\": msg.payload.EndPoint,\n    \"targetMapCode\": \"ZWIB\",\n    \"robotCode\": \"Robot_4\"\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 3000,
+        "y": 520,
+        "wires": [
+            [
+                "f13c3365f10cf7d9"
+            ]
+        ]
+    },
+    {
+        "id": "c03f86a5a66f58e2",
+        "type": "ui_form",
+        "z": "7a7483989013a825",
+        "name": "",
+        "label": "Robot 5 Move",
+        "group": "29b3add2b81dcd88",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "options": [
+            {
+                "label": "Start Point",
+                "value": "StartPoint",
+                "type": "text",
+                "required": true,
+                "rows": null
+            },
+            {
+                "label": "End Point",
+                "value": "EndPoint",
+                "type": "text",
+                "required": true,
+                "rows": null
+            }
+        ],
+        "formValue": {
+            "StartPoint": "",
+            "EndPoint": ""
+        },
+        "payload": "",
+        "submit": "Start Move",
+        "cancel": "",
+        "topic": "topic",
+        "topicType": "msg",
+        "splitLayout": "",
+        "className": "",
+        "x": 2780,
+        "y": 640,
+        "wires": [
+            [
+                "29b28c17f85f05ca"
+            ]
+        ]
+    },
+    {
+        "id": "d9ec1fd2a7d2f553",
+        "type": "http request",
+        "z": "7a7483989013a825",
+        "name": "",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "http://10.203.207.88:9003/api/quicktron/rss/warehouse/1/transport-order/carrier/submit",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 3190,
+        "y": 640,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "29b28c17f85f05ca",
+        "type": "function",
+        "z": "7a7483989013a825",
+        "name": "Message Body",
+        "func": "const randomHex = Math.random().toString(16).slice(2, 10);\nmsg.payload = {\n    \"upstreamOrderNo\": randomHex,\n    \"jobPriority\": 1,\n    \"letDownFlag\": 1,\n    \"rackTypeCode\": \"EURO\",\n    \"startPoint\": msg.payload.StartPoint,\n    \"startMapCode\": \"ZWIB\",\n    \"targetPoint\": msg.payload.EndPoint,\n    \"targetMapCode\": \"ZWIB\",\n    \"robotCode\": \"Robot_5\"\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2960,
+        "y": 640,
+        "wires": [
+            [
+                "d9ec1fd2a7d2f553"
+            ]
+        ]
+    },
+    {
+        "id": "146e04af54cd8b97",
+        "type": "ui_form",
+        "z": "7a7483989013a825",
+        "name": "",
+        "label": "Robot 6 Move",
+        "group": "863de7a8a722fb80",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "options": [
+            {
+                "label": "Start Point",
+                "value": "StartPoint",
+                "type": "text",
+                "required": true,
+                "rows": null
+            },
+            {
+                "label": "End Point",
+                "value": "EndPoint",
+                "type": "text",
+                "required": true,
+                "rows": null
+            }
+        ],
+        "formValue": {
+            "StartPoint": "",
+            "EndPoint": ""
+        },
+        "payload": "",
+        "submit": "Start Move",
+        "cancel": "",
+        "topic": "topic",
+        "topicType": "msg",
+        "splitLayout": "",
+        "className": "",
+        "x": 2820,
+        "y": 780,
+        "wires": [
+            [
+                "9b4c1c8c42ecc4ef"
+            ]
+        ]
+    },
+    {
+        "id": "8fe32f677a76fe4f",
+        "type": "http request",
+        "z": "7a7483989013a825",
+        "name": "",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "http://10.203.207.88:9003/api/quicktron/rss/warehouse/1/transport-order/carrier/submit",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 3230,
+        "y": 780,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "9b4c1c8c42ecc4ef",
+        "type": "function",
+        "z": "7a7483989013a825",
+        "name": "Message Body",
+        "func": "const randomHex = Math.random().toString(16).slice(2, 10);\nmsg.payload = {\n    \"upstreamOrderNo\": randomHex,\n    \"jobPriority\": 1,\n    \"letDownFlag\": 1,\n    \"rackTypeCode\": \"EURO\",\n    \"startPoint\": msg.payload.StartPoint,\n    \"startMapCode\": \"ZWIB\",\n    \"targetPoint\": msg.payload.EndPoint,\n    \"targetMapCode\": \"ZWIB\",\n    \"robotCode\": \"Robot_6\"\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 3000,
+        "y": 780,
+        "wires": [
+            [
+                "8fe32f677a76fe4f"
+            ]
+        ]
+    },
+    {
+        "id": "680e4430606e0e59",
+        "type": "inject",
+        "z": "7a7483989013a825",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 300,
+        "y": 1000,
+        "wires": [
+            [
+                "e7f96ee1d6c1ca09"
+            ]
+        ]
+    },
+    {
+        "id": "f7ae1923ade5bd3f",
+        "type": "ui_template",
+        "z": "7a7483989013a825",
+        "group": "80df0dcc5ce87836",
+        "name": "MainCSS",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "format": "<style>\n    /* Flex container to align items horizontally */\n    .robot-info {\n     //  margin-right: 20%;\n      \n   \n    }\n\n    .robot-info div\n    {\n       \n    }\n\n    .nr-dashboard-theme ui-card-panel\n    {\n        background-color:transparent;\n        border: none;\n    }\n    \n    .visible\n    {\n            display: flex;\n            align-items: center;\n            flex-wrap: wrap;\n            justify-content: space-around;\n            align-content: center;\n            flex-direction: column;\n    }\n\n \n\n</style>\n\n",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "global",
+        "className": "",
+        "x": 420,
+        "y": 380,
+        "wires": [
+            [
+                "f3b89af4d0baa75b"
+            ]
+        ]
+    },
+    {
+        "id": "e7f96ee1d6c1ca09",
+        "type": "ui_template",
+        "z": "7a7483989013a825",
+        "group": "06078e7a92afdd39",
+        "name": "",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "format": "<style>\n.horizontal\n{\n    background-color: red;\n    height: 100%;\n    display: flex;\n    justify-content: space-between; /* Adjust as needed */\n    align-items: center; /* Adjust as needed */\n    flex-wrap: wrap;\n}\n\n\n</style>\n<div>1</div>\n<div>2</div>\n<div>3</div>\n<div>4</div>\n",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "horizontal",
+        "x": 480,
+        "y": 1000,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "e066e74738ef933c",
+        "type": "ui_group",
+        "name": "Vehicle1",
+        "tab": "a2db9486681736e2",
+        "order": 1,
+        "disp": false,
+        "width": "4",
+        "collapse": false,
+        "className": "robot-info"
+    },
+    {
+        "id": "b75df571b1f857a9",
+        "type": "ui_group",
+        "name": "Vehicle2",
+        "tab": "a2db9486681736e2",
+        "order": 2,
+        "disp": false,
+        "width": "4",
+        "collapse": false,
+        "className": "robot-info"
+    },
+    {
+        "id": "4b5d8fe7e4ebb5f6",
+        "type": "ui_group",
+        "name": "Vehicle3",
+        "tab": "a2db9486681736e2",
+        "order": 3,
+        "disp": false,
+        "width": "4",
+        "collapse": false,
+        "className": "robot-info"
+    },
+    {
+        "id": "8aad3309eeadb1b9",
+        "type": "ui_group",
+        "name": "Vehicle4",
+        "tab": "a2db9486681736e2",
+        "order": 4,
+        "disp": false,
+        "width": "4",
+        "collapse": false,
+        "className": "robot-info"
+    },
+    {
+        "id": "29b3add2b81dcd88",
+        "type": "ui_group",
+        "name": "Vehicle5",
+        "tab": "a2db9486681736e2",
+        "order": 5,
+        "disp": false,
+        "width": "4",
+        "collapse": false,
+        "className": "robot-info"
+    },
+    {
+        "id": "863de7a8a722fb80",
+        "type": "ui_group",
+        "name": "Vehicle6",
+        "tab": "a2db9486681736e2",
+        "order": 6,
+        "disp": false,
+        "width": "4",
+        "collapse": false,
+        "className": "robot-info"
+    },
+    {
+        "id": "389d10ad69c6be87",
+        "type": "ui_group",
+        "name": "Archive",
+        "tab": "b5208d06ef4e7cd6",
+        "order": 1,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "80df0dcc5ce87836",
+        "type": "ui_group",
+        "name": "Vehicle Controls",
+        "tab": "a2db9486681736e2",
+        "order": 7,
+        "disp": false,
+        "width": "24",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "06078e7a92afdd39",
+        "type": "ui_group",
+        "name": "Testing",
+        "tab": "25ab1d704ec194d5",
+        "order": 1,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "a2db9486681736e2",
+        "type": "ui_tab",
+        "name": "3.4 - Vehicle status",
+        "icon": "dashboard",
+        "order": 2,
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "b5208d06ef4e7cd6",
+        "type": "ui_tab",
+        "name": "Archive",
+        "icon": "dashboard",
+        "disabled": true,
+        "hidden": true
+    },
+    {
+        "id": "25ab1d704ec194d5",
+        "type": "ui_tab",
+        "name": "CSS Testing",
+        "icon": "dashboard",
+        "order": 4,
+        "disabled": false,
+        "hidden": false
+    }
+]
