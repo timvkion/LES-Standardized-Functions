@@ -501,6 +501,256 @@
         "showLogs": true
     },
     {
+        "id": "a75fc2e37a329332",
+        "type": "subflow",
+        "name": "TrafficLightVisualizer",
+        "info": "",
+        "category": "",
+        "in": [
+            {
+                "x": 60,
+                "y": 80,
+                "wires": [
+                    {
+                        "id": "80f9f82086df658e"
+                    }
+                ]
+            }
+        ],
+        "out": [
+            {
+                "x": 1100,
+                "y": 160,
+                "wires": [
+                    {
+                        "id": "a525a75829da2122",
+                        "port": 0
+                    }
+                ]
+            }
+        ],
+        "env": [
+            {
+                "name": "Area_Name",
+                "type": "str",
+                "value": ""
+            },
+            {
+                "name": "Modbus_IP",
+                "type": "str",
+                "value": ""
+            },
+            {
+                "name": "Address_Green_1",
+                "type": "str",
+                "value": ""
+            },
+            {
+                "name": "Address_Green_2",
+                "type": "str",
+                "value": ""
+            },
+            {
+                "name": "Address_Green_3",
+                "type": "str",
+                "value": ""
+            },
+            {
+                "name": "Address_Green_4",
+                "type": "str",
+                "value": ""
+            },
+            {
+                "name": "Address_Red_1",
+                "type": "str",
+                "value": ""
+            },
+            {
+                "name": "Address_Red_2",
+                "type": "str",
+                "value": ""
+            },
+            {
+                "name": "Address_Red_3",
+                "type": "str",
+                "value": ""
+            },
+            {
+                "name": "Address_Red_4",
+                "type": "str",
+                "value": ""
+            },
+            {
+                "name": "Area_Name2",
+                "type": "str",
+                "value": ""
+            }
+        ],
+        "meta": {},
+        "color": "#DDAA99"
+    },
+    {
+        "id": "80f9f82086df658e",
+        "type": "subflow:61106ecd327bf247",
+        "z": "a75fc2e37a329332",
+        "name": "TrafficLight_1",
+        "env": [
+            {
+                "name": "Area_Name",
+                "value": "Area_Name",
+                "type": "env"
+            },
+            {
+                "name": "Modbus_IP",
+                "value": "Modbus_IP",
+                "type": "str"
+            },
+            {
+                "name": "Adress_Green_1",
+                "value": "Address_Green_1",
+                "type": "str"
+            },
+            {
+                "name": "Adress_Green_2",
+                "value": "Address_Green_2",
+                "type": "str"
+            },
+            {
+                "name": "Adress_Green_3",
+                "value": "Address_Green_3",
+                "type": "str"
+            },
+            {
+                "name": "Adress_Green_4",
+                "value": "Address_Green_4",
+                "type": "str"
+            },
+            {
+                "name": "Adress_Red_1",
+                "value": "Address_Red_1",
+                "type": "str"
+            },
+            {
+                "name": "Adress_Red_2",
+                "value": "Address_Red_2",
+                "type": "str"
+            },
+            {
+                "name": "Adress_Red_3",
+                "value": "Address_Red_3",
+                "type": "str"
+            },
+            {
+                "name": "Adress_Red_4",
+                "value": "Address_Red_4",
+                "type": "str"
+            },
+            {
+                "name": "Area_Name2",
+                "value": "Area_Name2",
+                "type": "str"
+            },
+            {
+                "name": "Name",
+                "value": "AvoidArea_968",
+                "type": "str"
+            },
+            {
+                "name": "Adress_green",
+                "value": "00001",
+                "type": "str"
+            },
+            {
+                "name": "Adress_red",
+                "value": "00002",
+                "type": "str"
+            },
+            {
+                "name": "Protocol",
+                "value": "Modbus",
+                "type": "str"
+            }
+        ],
+        "x": 220,
+        "y": 80,
+        "wires": [
+            [
+                "373ba7127c3b396c"
+            ],
+            [
+                "373ba7127c3b396c"
+            ]
+        ],
+        "info": "Determines whether a given zone(s) has a vehicle driving over it or not\r\n\r\nReturns true or false and writes to the correct modbus"
+    },
+    {
+        "id": "32bb108f667fbd8c",
+        "type": "template",
+        "z": "a75fc2e37a329332",
+        "name": "TrafficLightTemplate",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "<div style=\"text-align:center;\">\n    <svg height=\"125\" width=\"50\">\n\n        <!-- Green Light -->\n        <circle id=\"greenLight\" cx=\"25\" cy=\"25\" r=\"20\" stroke=\"black\" stroke-width=\"3\" \n        fill=\"{{payload.greenFill}}\"/>\n\n        <!-- Red Light -->\n        <circle id=\"redLight\" cx=\"25\" cy=\"70\" r=\"20\" stroke=\"black\" stroke-width=\"3\" \n        fill=\"{{payload.redFill}}\" />\n    </svg>\n</div>\n\n",
+        "output": "str",
+        "x": 640,
+        "y": 140,
+        "wires": [
+            [
+                "a525a75829da2122"
+            ]
+        ],
+        "info": "Displays traffic light and changes the fill color based on the input"
+    },
+    {
+        "id": "a525a75829da2122",
+        "type": "uib-element",
+        "z": "a75fc2e37a329332",
+        "name": "",
+        "topic": "",
+        "elementtype": "html",
+        "parent": "#more",
+        "parentSource": "#more",
+        "parentSourceType": "str",
+        "elementid": "Area_Name",
+        "elementIdSourceType": "env",
+        "heading": "",
+        "headingSourceType": "str",
+        "headingLevel": "h2",
+        "data": "payload",
+        "dataSourceType": "msg",
+        "position": "last",
+        "positionSourceType": "str",
+        "passthrough": false,
+        "confData": {},
+        "x": 950,
+        "y": 160,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "373ba7127c3b396c",
+        "type": "function",
+        "z": "a75fc2e37a329332",
+        "name": "SetFill",
+        "func": "var greenFill = \"\"\nvar redFill = \"\"\nif(msg.payload)\n{\n    msg.payload =\n    {\n\n        greenFill: \"transparent\",\n        redFill: \"red\"\n    }\n\n}\nelse\n{\n    msg.payload =\n    {\n\n        greenFill: \"green\",\n        redFill: \"transparent\"\n    }\n}\n\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 410,
+        "y": 140,
+        "wires": [
+            [
+                "32bb108f667fbd8c"
+            ]
+        ],
+        "info": "Required to dynamically change the color "
+    },
+    {
         "id": "2ea7f24a0e34acc7",
         "type": "tab",
         "label": "TrafficLightTest",
@@ -531,7 +781,8 @@
                 "f44a7fd86509c26a",
                 "14a4a03cebef845f"
             ]
-        ]
+        ],
+        "info": "Queries all the robots"
     },
     {
         "id": "f44a7fd86509c26a",
@@ -544,82 +795,15 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 610,
-        "y": 300,
-        "wires": [
-            [
-                "80f9f82086df658e"
-            ]
-        ],
-        "info": "Fixed JSON parsing when AMR is removed from the map\r\n\r\nexample:\r\n[\"AvoidArea_496\",\"ParkingArea_858\",\"LimitArea_714\",\"AvoidArea_477\"]"
-    },
-    {
-        "id": "80f9f82086df658e",
-        "type": "subflow:61106ecd327bf247",
-        "z": "2ea7f24a0e34acc7",
-        "name": "TrafficLight_1",
-        "env": [
-            {
-                "name": "Area_Name",
-                "value": "RobotControlArea_591",
-                "type": "str"
-            },
-            {
-                "name": "Modbus_IP",
-                "value": "127.0.0.1",
-                "type": "str"
-            },
-            {
-                "name": "Adress_Green_1",
-                "value": "16",
-                "type": "str"
-            },
-            {
-                "name": "Adress_Green_2",
-                "value": "18",
-                "type": "str"
-            },
-            {
-                "name": "Adress_Red_1",
-                "value": "17",
-                "type": "str"
-            },
-            {
-                "name": "Adress_Red_2",
-                "value": "19",
-                "type": "str"
-            },
-            {
-                "name": "Name",
-                "value": "AvoidArea_968",
-                "type": "str"
-            },
-            {
-                "name": "Adress_green",
-                "value": "00001",
-                "type": "str"
-            },
-            {
-                "name": "Adress_red",
-                "value": "00002",
-                "type": "str"
-            },
-            {
-                "name": "Protocol",
-                "value": "Modbus",
-                "type": "str"
-            }
-        ],
-        "x": 740,
+        "x": 530,
         "y": 420,
         "wires": [
             [
-                "373ba7127c3b396c"
-            ],
-            [
-                "373ba7127c3b396c"
+                "f5c32ad2aefbfba4",
+                "48e8ebd252199cc5"
             ]
-        ]
+        ],
+        "info": "Parses all the unique area codes from the map\r\n\r\n\r\nFixed JSON parsing when AMR is removed from the map\r\n\r\nexample:\r\n[\"AvoidArea_496\",\"ParkingArea_858\",\"LimitArea_714\",\"AvoidArea_477\"]"
     },
     {
         "id": "14a4a03cebef845f",
@@ -672,7 +856,7 @@
                 "vt": "str"
             }
         ],
-        "repeat": "",
+        "repeat": "1",
         "crontab": "",
         "once": true,
         "onceDelay": "1",
@@ -685,26 +869,8 @@
             [
                 "08c6a065eee7d8e5"
             ]
-        ]
-    },
-    {
-        "id": "32bb108f667fbd8c",
-        "type": "template",
-        "z": "2ea7f24a0e34acc7",
-        "name": "TrafficLightTemplate",
-        "field": "payload",
-        "fieldType": "msg",
-        "format": "handlebars",
-        "syntax": "mustache",
-        "template": "<div style=\"text-align:center;\">\n    <svg height=\"125\" width=\"50\">\n\n        <!-- Green Light -->\n        <circle id=\"greenLight\" cx=\"25\" cy=\"25\" r=\"20\" stroke=\"black\" stroke-width=\"3\" \n        fill=\"{{payload.greenFill}}\"/>\n\n        <!-- Red Light -->\n        <circle id=\"redLight\" cx=\"25\" cy=\"70\" r=\"20\" stroke=\"black\" stroke-width=\"3\" \n        fill=\"{{payload.redFill}}\" />\n    </svg>\n</div>\n\n",
-        "output": "str",
-        "x": 1120,
-        "y": 500,
-        "wires": [
-            [
-                "a525a75829da2122"
-            ]
-        ]
+        ],
+        "info": "Injects body, only mapCode is mandatory"
     },
     {
         "id": "d205346c4ef971ee",
@@ -727,36 +893,62 @@
         "showMsgUib": false,
         "title": "",
         "descr": "",
-        "x": 1710,
-        "y": 580,
+        "x": 1050,
+        "y": 420,
         "wires": [
             [],
             []
         ]
     },
     {
-        "id": "a525a75829da2122",
-        "type": "uib-element",
+        "id": "676d0c5d2a7f32b4",
+        "type": "comment",
+        "z": "2ea7f24a0e34acc7",
+        "name": "Parses areas, creates traffic light visualisation and displays whether or not an AMR is driving over an area",
+        "info": "",
+        "x": 500,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "f5c32ad2aefbfba4",
+        "type": "subflow:a75fc2e37a329332",
         "z": "2ea7f24a0e34acc7",
         "name": "",
-        "topic": "traffic1",
-        "elementtype": "html",
-        "parent": "#more",
-        "parentSource": "#more",
-        "parentSourceType": "str",
-        "elementid": "traffic1",
-        "elementIdSourceType": "str",
-        "heading": "",
-        "headingSourceType": "str",
-        "headingLevel": "h2",
-        "data": "payload",
-        "dataSourceType": "msg",
-        "position": "last",
-        "positionSourceType": "str",
-        "passthrough": false,
-        "confData": {},
-        "x": 1390,
-        "y": 600,
+        "env": [
+            {
+                "name": "Area_Name",
+                "value": "RobotControlArea_591",
+                "type": "str"
+            },
+            {
+                "name": "Modbus_IP",
+                "value": "127.0.0.1",
+                "type": "str"
+            },
+            {
+                "name": "Address_Green_1",
+                "value": "16",
+                "type": "str"
+            },
+            {
+                "name": "Address_Green_2",
+                "value": "18",
+                "type": "str"
+            },
+            {
+                "name": "Address_Red_1",
+                "value": "17",
+                "type": "str"
+            },
+            {
+                "name": "Address_Red_2",
+                "value": "19",
+                "type": "str"
+            }
+        ],
+        "x": 800,
+        "y": 380,
         "wires": [
             [
                 "d205346c4ef971ee"
@@ -764,22 +956,58 @@
         ]
     },
     {
-        "id": "373ba7127c3b396c",
-        "type": "function",
+        "id": "48e8ebd252199cc5",
+        "type": "subflow:a75fc2e37a329332",
         "z": "2ea7f24a0e34acc7",
-        "name": "function 77",
-        "func": "var greenFill = \"\"\nvar redFill = \"\"\nif(msg.payload)\n{\n    msg.payload =\n    {\n\n        greenFill: \"transparent\",\n        redFill: \"red\"\n    }\n\n}\nelse\n{\n    msg.payload =\n    {\n\n        greenFill: \"green\",\n        redFill: \"transparent\"\n    }\n}\n\n\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 910,
-        "y": 520,
+        "name": "",
+        "env": [
+            {
+                "name": "Area_Name",
+                "value": "RobotControlArea_452",
+                "type": "str"
+            },
+            {
+                "name": "Modbus_IP",
+                "value": "127.0.0.1",
+                "type": "str"
+            },
+            {
+                "name": "Address_Green_1",
+                "value": "16",
+                "type": "str"
+            },
+            {
+                "name": "Address_Green_2",
+                "value": "18",
+                "type": "str"
+            },
+            {
+                "name": "Address_Red_1",
+                "value": "17",
+                "type": "str"
+            },
+            {
+                "name": "Address_Red_2",
+                "value": "19",
+                "type": "str"
+            }
+        ],
+        "x": 800,
+        "y": 460,
         "wires": [
             [
-                "32bb108f667fbd8c"
+                "d205346c4ef971ee"
             ]
         ]
+    },
+    {
+        "id": "9e9478e1c0d215dc",
+        "type": "comment",
+        "z": "2ea7f24a0e34acc7",
+        "name": "Add traffic visualizer subflow for every area you want to visualize",
+        "info": "",
+        "x": 930,
+        "y": 320,
+        "wires": []
     }
 ]
