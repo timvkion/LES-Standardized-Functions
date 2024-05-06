@@ -1,0 +1,785 @@
+[
+    {
+        "id": "61106ecd327bf247",
+        "type": "subflow",
+        "name": "TrafficLightArea_Modbus",
+        "info": "",
+        "category": "",
+        "in": [
+            {
+                "x": 60,
+                "y": 240,
+                "wires": [
+                    {
+                        "id": "5a553df376a7267d"
+                    }
+                ]
+            }
+        ],
+        "out": [
+            {
+                "x": 1000,
+                "y": 240,
+                "wires": [
+                    {
+                        "id": "9edd5add8ce5bfb8",
+                        "port": 0
+                    }
+                ]
+            },
+            {
+                "x": 990,
+                "y": 540,
+                "wires": [
+                    {
+                        "id": "9edd5add8ce5bfb8",
+                        "port": 1
+                    }
+                ]
+            }
+        ],
+        "env": [
+            {
+                "name": "Area_Name",
+                "type": "str",
+                "value": ""
+            },
+            {
+                "name": "Modbus_IP",
+                "type": "str",
+                "value": ""
+            },
+            {
+                "name": "Adress_Green_1",
+                "type": "str",
+                "value": ""
+            },
+            {
+                "name": "Adress_Green_2",
+                "type": "str",
+                "value": ""
+            },
+            {
+                "name": "Adress_Green_3",
+                "type": "str",
+                "value": ""
+            },
+            {
+                "name": "Adress_Green_4",
+                "type": "str",
+                "value": ""
+            },
+            {
+                "name": "Adress_Red_1",
+                "type": "str",
+                "value": ""
+            },
+            {
+                "name": "Adress_Red_2",
+                "type": "str",
+                "value": ""
+            },
+            {
+                "name": "Adress_Red_3",
+                "type": "str",
+                "value": ""
+            },
+            {
+                "name": "Adress_Red_4",
+                "type": "str",
+                "value": ""
+            },
+            {
+                "name": "Area_Name2",
+                "type": "str",
+                "value": ""
+            }
+        ],
+        "meta": {},
+        "color": "#AAAA66",
+        "inputLabels": [
+            "Input Area_Name"
+        ],
+        "outputLabels": [
+            "Output for debug node Green light",
+            "Output for debug node Red light"
+        ],
+        "icon": "font-awesome/fa-lightbulb-o"
+    },
+    {
+        "id": "fbc49266aa0ccffb",
+        "type": "comment",
+        "z": "61106ecd327bf247",
+        "name": "Concept 2: Filter zone and controll separate IO ",
+        "info": "This gives the possibility to create\nparametrized trafficlights in subflow:\n- zone name\n- green adress\n- red adress",
+        "x": 310,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "5a553df376a7267d",
+        "type": "function",
+        "z": "61106ecd327bf247",
+        "name": "function 3",
+        "func": "// Assuming the incoming message object is stored in the variable 'msg'\n// You can access the input set of strings and the given set of strings using msg.payload\nconst givenName = env.get(\"Area_Name\");\nconst givenName2 = env.get(\"Area_Name2\");\ntry {\n    // Check if the required fields are present in the payload\n    if (!msg.payload) {\n        throw new Error(\"Invalid input payload\");\n    }\n\n    // Convert sets to arrays for easier comparison\n    const inputSet = Array.isArray(msg.payload) ? msg.payload : [];\n    //const givenSet = Array.isArray(TrafficLights) ? msg.payload.givenSet : [];\n\n    // Compare sets and create a list of booleans\n    const result = inputSet.includes(givenName) || inputSet.includes(givenName2);\n\n    // Create the output message with the list of booleans\n    msg.payload = result;\n\n    // Return the modified message object\n    return msg;\n\n} catch (error) {\n    // Handle errors\n    msg.payload = {\n        error: error.message || \"Error comparing sets\"\n    };\n\n    // Return the error message\n    return msg;\n}\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 200,
+        "y": 240,
+        "wires": [
+            [
+                "9edd5add8ce5bfb8"
+            ]
+        ]
+    },
+    {
+        "id": "9edd5add8ce5bfb8",
+        "type": "switch",
+        "z": "61106ecd327bf247",
+        "name": "",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "cont",
+                "v": "false",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "true",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 410,
+        "y": 240,
+        "wires": [
+            [
+                "d1c2b7e7a72be549",
+                "653862466e4680bb"
+            ],
+            [
+                "5be67fce9aada45a",
+                "42a4791536c592d8"
+            ]
+        ]
+    },
+    {
+        "id": "eebd310a57c21ff7",
+        "type": "comment",
+        "z": "61106ecd327bf247",
+        "name": "Output Green",
+        "info": "",
+        "x": 930,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "fe63756b639dd57f",
+        "type": "comment",
+        "z": "61106ecd327bf247",
+        "name": "Output Red",
+        "info": "",
+        "x": 930,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "5be67fce9aada45a",
+        "type": "function",
+        "z": "61106ecd327bf247",
+        "name": "function 74",
+        "func": "// Example code for resetting a Modbus output\nmsg.payload = {\n    value: 0,  // Set the value you want to write to the Modbus address\n};\nreturn msg;\n\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 670,
+        "y": 340,
+        "wires": [
+            [
+                "30878bda17cffbb9",
+                "5be08313d9385eba",
+                "b5a5f0a59b624531",
+                "c9dcd5e6ba01d769"
+            ]
+        ]
+    },
+    {
+        "id": "d1c2b7e7a72be549",
+        "type": "function",
+        "z": "61106ecd327bf247",
+        "name": "function 73",
+        "func": "msg.payload = {\n    value: 0,  // Set the value you want to write to the Modbus address\n};\nreturn msg;\n\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 670,
+        "y": 180,
+        "wires": [
+            [
+                "11207b12067ecd1e",
+                "3779f1bbd0774334",
+                "fd907d1e9e695cec",
+                "c7297629c95ba88a"
+            ]
+        ]
+    },
+    {
+        "id": "653862466e4680bb",
+        "type": "function",
+        "z": "61106ecd327bf247",
+        "name": "function 75",
+        "func": "msg.payload = {\n    value: 1,  // Set the value you want to write to the Modbus address\n};\nreturn msg;\n\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 670,
+        "y": 140,
+        "wires": [
+            [
+                "30878bda17cffbb9",
+                "5be08313d9385eba",
+                "b5a5f0a59b624531",
+                "c9dcd5e6ba01d769"
+            ]
+        ]
+    },
+    {
+        "id": "42a4791536c592d8",
+        "type": "function",
+        "z": "61106ecd327bf247",
+        "name": "function 76",
+        "func": "// Example code for resetting a Modbus output\nmsg.payload = {\n    value: 1,  // Set the value you want to write to the Modbus address\n};\nreturn msg;\n\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 670,
+        "y": 300,
+        "wires": [
+            [
+                "11207b12067ecd1e",
+                "3779f1bbd0774334",
+                "fd907d1e9e695cec",
+                "c7297629c95ba88a"
+            ]
+        ]
+    },
+    {
+        "id": "30878bda17cffbb9",
+        "type": "modbus-write",
+        "z": "61106ecd327bf247",
+        "name": "",
+        "showStatusActivities": false,
+        "showErrors": false,
+        "showWarnings": true,
+        "unitid": "",
+        "dataType": "Coil",
+        "adr": "$(Adress_Green_1)",
+        "quantity": "1",
+        "server": "19ccfb47f926e7f1",
+        "emptyMsgOnFail": false,
+        "keepMsgProperties": false,
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "x": 940,
+        "y": 80,
+        "wires": [
+            [],
+            []
+        ]
+    },
+    {
+        "id": "11207b12067ecd1e",
+        "type": "modbus-write",
+        "z": "61106ecd327bf247",
+        "name": "",
+        "showStatusActivities": false,
+        "showErrors": false,
+        "showWarnings": true,
+        "unitid": "",
+        "dataType": "Coil",
+        "adr": "$(Adress_Red_1)",
+        "quantity": "1",
+        "server": "19ccfb47f926e7f1",
+        "emptyMsgOnFail": false,
+        "keepMsgProperties": false,
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "x": 940,
+        "y": 380,
+        "wires": [
+            [],
+            []
+        ]
+    },
+    {
+        "id": "5be08313d9385eba",
+        "type": "modbus-write",
+        "z": "61106ecd327bf247",
+        "name": "",
+        "showStatusActivities": false,
+        "showErrors": false,
+        "showWarnings": true,
+        "unitid": "",
+        "dataType": "Coil",
+        "adr": "$(Adress_Green_2)",
+        "quantity": "1",
+        "server": "19ccfb47f926e7f1",
+        "emptyMsgOnFail": false,
+        "keepMsgProperties": false,
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "x": 940,
+        "y": 120,
+        "wires": [
+            [],
+            []
+        ]
+    },
+    {
+        "id": "b5a5f0a59b624531",
+        "type": "modbus-write",
+        "z": "61106ecd327bf247",
+        "name": "",
+        "showStatusActivities": false,
+        "showErrors": false,
+        "showWarnings": true,
+        "unitid": "",
+        "dataType": "Coil",
+        "adr": "$(Adress_Green_3)",
+        "quantity": "1",
+        "server": "19ccfb47f926e7f1",
+        "emptyMsgOnFail": false,
+        "keepMsgProperties": false,
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "x": 940,
+        "y": 160,
+        "wires": [
+            [],
+            []
+        ]
+    },
+    {
+        "id": "c9dcd5e6ba01d769",
+        "type": "modbus-write",
+        "z": "61106ecd327bf247",
+        "name": "",
+        "showStatusActivities": false,
+        "showErrors": false,
+        "showWarnings": true,
+        "unitid": "",
+        "dataType": "Coil",
+        "adr": "$(Adress_Green_4)",
+        "quantity": "1",
+        "server": "19ccfb47f926e7f1",
+        "emptyMsgOnFail": false,
+        "keepMsgProperties": false,
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "x": 940,
+        "y": 200,
+        "wires": [
+            [],
+            []
+        ]
+    },
+    {
+        "id": "3779f1bbd0774334",
+        "type": "modbus-write",
+        "z": "61106ecd327bf247",
+        "name": "",
+        "showStatusActivities": false,
+        "showErrors": false,
+        "showWarnings": true,
+        "unitid": "",
+        "dataType": "Coil",
+        "adr": "$(Adress_Red_2)",
+        "quantity": "1",
+        "server": "19ccfb47f926e7f1",
+        "emptyMsgOnFail": false,
+        "keepMsgProperties": false,
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "x": 940,
+        "y": 420,
+        "wires": [
+            [],
+            []
+        ]
+    },
+    {
+        "id": "fd907d1e9e695cec",
+        "type": "modbus-write",
+        "z": "61106ecd327bf247",
+        "name": "",
+        "showStatusActivities": false,
+        "showErrors": false,
+        "showWarnings": true,
+        "unitid": "",
+        "dataType": "Coil",
+        "adr": "$(Adress_Red_3)",
+        "quantity": "1",
+        "server": "19ccfb47f926e7f1",
+        "emptyMsgOnFail": false,
+        "keepMsgProperties": false,
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "x": 940,
+        "y": 460,
+        "wires": [
+            [],
+            []
+        ]
+    },
+    {
+        "id": "c7297629c95ba88a",
+        "type": "modbus-write",
+        "z": "61106ecd327bf247",
+        "name": "",
+        "showStatusActivities": false,
+        "showErrors": false,
+        "showWarnings": true,
+        "unitid": "",
+        "dataType": "Coil",
+        "adr": "$(Adress_Red_4)",
+        "quantity": "1",
+        "server": "19ccfb47f926e7f1",
+        "emptyMsgOnFail": false,
+        "keepMsgProperties": false,
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "x": 940,
+        "y": 500,
+        "wires": [
+            [],
+            []
+        ]
+    },
+    {
+        "id": "19ccfb47f926e7f1",
+        "type": "modbus-client",
+        "z": "61106ecd327bf247",
+        "name": "",
+        "clienttype": "tcp",
+        "bufferCommands": true,
+        "stateLogEnabled": false,
+        "queueLogEnabled": false,
+        "failureLogEnabled": true,
+        "tcpHost": "$(Modbus_IP)",
+        "tcpPort": "502",
+        "tcpType": "DEFAULT",
+        "serialPort": "/dev/ttyUSB",
+        "serialType": "RTU-BUFFERD",
+        "serialBaudrate": "9600",
+        "serialDatabits": "8",
+        "serialStopbits": "1",
+        "serialParity": "none",
+        "serialConnectionDelay": "100",
+        "serialAsciiResponseStartDelimiter": "0x3A",
+        "unit_id": 1,
+        "commandDelay": 1,
+        "clientTimeout": 1000,
+        "reconnectOnTimeout": true,
+        "reconnectTimeout": 2000,
+        "parallelUnitIdsAllowed": true,
+        "showWarnings": true,
+        "showLogs": true
+    },
+    {
+        "id": "2ea7f24a0e34acc7",
+        "type": "tab",
+        "label": "TrafficLightTest",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "08c6a065eee7d8e5",
+        "type": "http request",
+        "z": "2ea7f24a0e34acc7",
+        "name": "",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "http://10.203.207.88:9003/api/quicktron/rss/warehouse/1/carrier/robots/query",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 390,
+        "y": 300,
+        "wires": [
+            [
+                "f44a7fd86509c26a",
+                "14a4a03cebef845f"
+            ]
+        ]
+    },
+    {
+        "id": "f44a7fd86509c26a",
+        "type": "function",
+        "z": "2ea7f24a0e34acc7",
+        "name": "ParseAreas",
+        "func": "try {\n    // Parse the incoming JSON response\n    const jsonResponse = JSON.parse(msg.payload);\n\n    // Extract areaCodes from each object in the data array\n    const areaCodesList = jsonResponse.data.reduce((acc, robotData) => {\n        // Check if areaCodeList is an array before spreading\n        if (Array.isArray(robotData.areaCodeList)) {\n            acc.push(...robotData.areaCodeList);\n        }\n        return acc;\n    }, []);\n\n    // Remove duplicate areaCodes using Set\n    const uniqueAreaCodes = [...new Set(areaCodesList)];\n\n    // Create the output message with the list of unique areaCodes\n    msg.payload = uniqueAreaCodes;\n\n    // Return the modified message object\n    return msg;\n\n} catch (error) {\n    // Handle parsing errors\n    msg.payload = {\n        error: \"Error parsing JSON response\"\n    };\n\n    // Return the error message\n    return msg;\n}\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 610,
+        "y": 300,
+        "wires": [
+            [
+                "80f9f82086df658e"
+            ]
+        ],
+        "info": "Fixed JSON parsing when AMR is removed from the map\r\n\r\nexample:\r\n[\"AvoidArea_496\",\"ParkingArea_858\",\"LimitArea_714\",\"AvoidArea_477\"]"
+    },
+    {
+        "id": "80f9f82086df658e",
+        "type": "subflow:61106ecd327bf247",
+        "z": "2ea7f24a0e34acc7",
+        "name": "TrafficLight_1",
+        "env": [
+            {
+                "name": "Area_Name",
+                "value": "RobotControlArea_591",
+                "type": "str"
+            },
+            {
+                "name": "Modbus_IP",
+                "value": "127.0.0.1",
+                "type": "str"
+            },
+            {
+                "name": "Adress_Green_1",
+                "value": "16",
+                "type": "str"
+            },
+            {
+                "name": "Adress_Green_2",
+                "value": "18",
+                "type": "str"
+            },
+            {
+                "name": "Adress_Red_1",
+                "value": "17",
+                "type": "str"
+            },
+            {
+                "name": "Adress_Red_2",
+                "value": "19",
+                "type": "str"
+            },
+            {
+                "name": "Name",
+                "value": "AvoidArea_968",
+                "type": "str"
+            },
+            {
+                "name": "Adress_green",
+                "value": "00001",
+                "type": "str"
+            },
+            {
+                "name": "Adress_red",
+                "value": "00002",
+                "type": "str"
+            },
+            {
+                "name": "Protocol",
+                "value": "Modbus",
+                "type": "str"
+            }
+        ],
+        "x": 740,
+        "y": 420,
+        "wires": [
+            [
+                "373ba7127c3b396c"
+            ],
+            [
+                "373ba7127c3b396c"
+            ]
+        ]
+    },
+    {
+        "id": "14a4a03cebef845f",
+        "type": "function",
+        "z": "2ea7f24a0e34acc7",
+        "name": "Parse pointCode values",
+        "func": "// Parse the JSON payload\ntry {\n    var payload = JSON.parse(msg.payload);\n} catch (error) {\n    node.error(\"Invalid payload structure\", error);\n    return null\n};\n\n\n// Check if the payload has the expected structure\nif (payload.success && Array.isArray(payload.data) && payload.data.length > 0) {\n    // Extract the \"pointCode\" values from the \"data\" array\n    var pointCodes = payload.data.map(item => item.pointCode);\n\n    // Create a new message object with the extracted \"pointCode\" values\n    msg.payload = pointCodes;\n\n    // Return the modified message\n    return msg;\n} else {\n    // If the payload structure is not as expected, log an error\n    node.error(\"Invalid payload structure\");\n    return null;\n}",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 650,
+        "y": 200,
+        "wires": [
+            [
+                "aef93354242699d4"
+            ]
+        ]
+    },
+    {
+        "id": "aef93354242699d4",
+        "type": "function",
+        "z": "2ea7f24a0e34acc7",
+        "name": "setGlobalVarable",
+        "func": "// Assuming msg.payload contains your pointCodes\nvar pointCodes = msg.payload;\n\n// Set the global variable\nglobal.set(\"pointCodes\", pointCodes);\n\n// You can also log the values for debugging purposes\n//console.log(\"pointCodes:\", pointCodes);\n\n// Pass the message along\nreturn msg;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 930,
+        "y": 200,
+        "wires": [
+            []
+        ],
+        "info": "Parsing code points\r\n\r\nExample:\r\n[\"0568\",\"\",\"0561\",\"0408\",\"0559\",\"0085\"]"
+    },
+    {
+        "id": "be1fdeb7a87e6a4e",
+        "type": "inject",
+        "z": "2ea7f24a0e34acc7",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "1",
+        "topic": "",
+        "payload": "{\"mapCode\":\"ZWIB\",\"robotCode\":\"\",\"pointCode\":\"\",\"areaCode\":\"\"}",
+        "payloadType": "json",
+        "x": 210,
+        "y": 300,
+        "wires": [
+            [
+                "08c6a065eee7d8e5"
+            ]
+        ]
+    },
+    {
+        "id": "32bb108f667fbd8c",
+        "type": "template",
+        "z": "2ea7f24a0e34acc7",
+        "name": "TrafficLightTemplate",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "<div style=\"text-align:center;\">\n    <svg height=\"125\" width=\"50\">\n\n        <!-- Green Light -->\n        <circle id=\"greenLight\" cx=\"25\" cy=\"25\" r=\"20\" stroke=\"black\" stroke-width=\"3\" \n        fill=\"{{payload.greenFill}}\"/>\n\n        <!-- Red Light -->\n        <circle id=\"redLight\" cx=\"25\" cy=\"70\" r=\"20\" stroke=\"black\" stroke-width=\"3\" \n        fill=\"{{payload.redFill}}\" />\n    </svg>\n</div>\n\n",
+        "output": "str",
+        "x": 1120,
+        "y": 500,
+        "wires": [
+            [
+                "a525a75829da2122"
+            ]
+        ]
+    },
+    {
+        "id": "d205346c4ef971ee",
+        "type": "uibuilder",
+        "z": "2ea7f24a0e34acc7",
+        "name": "",
+        "topic": "",
+        "url": "trafficlights",
+        "okToGo": true,
+        "fwdInMessages": false,
+        "allowScripts": false,
+        "allowStyles": false,
+        "copyIndex": true,
+        "templateFolder": "blank",
+        "extTemplate": "",
+        "showfolder": false,
+        "reload": false,
+        "sourceFolder": "src",
+        "deployedVersion": "6.8.2",
+        "showMsgUib": false,
+        "title": "",
+        "descr": "",
+        "x": 1710,
+        "y": 580,
+        "wires": [
+            [],
+            []
+        ]
+    },
+    {
+        "id": "a525a75829da2122",
+        "type": "uib-element",
+        "z": "2ea7f24a0e34acc7",
+        "name": "",
+        "topic": "traffic1",
+        "elementtype": "html",
+        "parent": "#more",
+        "parentSource": "#more",
+        "parentSourceType": "str",
+        "elementid": "traffic1",
+        "elementIdSourceType": "str",
+        "heading": "",
+        "headingSourceType": "str",
+        "headingLevel": "h2",
+        "data": "payload",
+        "dataSourceType": "msg",
+        "position": "last",
+        "positionSourceType": "str",
+        "passthrough": false,
+        "confData": {},
+        "x": 1390,
+        "y": 600,
+        "wires": [
+            [
+                "d205346c4ef971ee"
+            ]
+        ]
+    },
+    {
+        "id": "373ba7127c3b396c",
+        "type": "function",
+        "z": "2ea7f24a0e34acc7",
+        "name": "function 77",
+        "func": "var greenFill = \"\"\nvar redFill = \"\"\nif(msg.payload)\n{\n    msg.payload =\n    {\n\n        greenFill: \"transparent\",\n        redFill: \"red\"\n    }\n\n}\nelse\n{\n    msg.payload =\n    {\n\n        greenFill: \"green\",\n        redFill: \"transparent\"\n    }\n}\n\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 910,
+        "y": 520,
+        "wires": [
+            [
+                "32bb108f667fbd8c"
+            ]
+        ]
+    }
+]
