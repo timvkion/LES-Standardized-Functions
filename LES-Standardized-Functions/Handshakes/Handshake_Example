@@ -1,0 +1,791 @@
+[
+    {
+        "id": "f8f919c05e1bde09",
+        "type": "subflow",
+        "name": "SetDoorCodes",
+        "info": "",
+        "category": "",
+        "in": [
+            {
+                "x": 60,
+                "y": 200,
+                "wires": [
+                    {
+                        "id": "07a9b3fd5dc2b5b7"
+                    }
+                ]
+            }
+        ],
+        "out": [],
+        "env": [],
+        "meta": {},
+        "color": "#DDAA99"
+    },
+    {
+        "id": "07a9b3fd5dc2b5b7",
+        "type": "function",
+        "z": "f8f919c05e1bde09",
+        "name": "SetDoorCodes",
+        "func": "global.set(\"DropDoorCodes\", [\"Door_1\",\"Door_2\"])\nglobal.set(\"PickDoorCodes\",[])\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 220,
+        "y": 200,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "6d7121fb37f35ab0",
+        "type": "comment",
+        "z": "f8f919c05e1bde09",
+        "name": "Add more doorcodes here!",
+        "info": "",
+        "x": 250,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "5930649fc80f0e29",
+        "type": "tab",
+        "label": "Handshakes",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "864d44c8da27c5eb",
+        "type": "link in",
+        "z": "5930649fc80f0e29",
+        "name": "link in 12",
+        "links": [
+            "9d140206dc87f8bf"
+        ],
+        "x": 165,
+        "y": 240,
+        "wires": [
+            [
+                "d57e59ca1af61cfb"
+            ]
+        ]
+    },
+    {
+        "id": "d57e59ca1af61cfb",
+        "type": "function",
+        "z": "5930649fc80f0e29",
+        "name": "Check Location Status and create opc ua point",
+        "func": "var message=msg.payload\nvar command = message.command\nvar commandString = '_Status'\nvar isLoadingValue = message.isLoading\nvar dropDoorCodes = global.get(\"DropDoorCodes\")\nvar pickDoorCodes = global.get(\"PickDoorCodes\")\nfor (let index = 0; index < dropDoorCodes.length; index++) {\n    const element = dropDoorCodes[index];\n    if(command == element+commandString)\n    {\n        var msg1 = msg\n        if(isLoadingValue)\n        {\n\n        msg1.topic = 'ns=3;s=\"DB85_RcvAMR\".\"DropRequest\"'+element;\n        msg1.datatype = 'Boolean';\n        flow.set(\"DropRequest\"+element, true, \"store\")\n        }\n        return[msg,msg1]\n    }\n}\n\nfor (let index = 0; index < pickDoorCodes.length; index++) {\n    const element = pickDoorCodes[index];\n    if (command == element + commandString) {\n        var msg1 = msg\n        if (isLoadingValue) {\n\n            msg1.topic = 'ns=3;s=\"DB85_RcvAMR\".\"DropRequest\"' + element;\n            msg1.datatype = 'Boolean';\n            flow.set(\"DropRequest\" + element, true, \"store\")\n        }\n        return [msg, msg1]\n    }\n}\n\n// //which buffer location\n// if (command =='010945_Status'){\n//     var msg1=msg\n//     //if Drop action\n//     if(isLoadingValue){\n//         msg1.topic = 'ns=3;s=\"DB85_RcvAMR\".\"DropRequest010945\"';\n//         msg1.datatype = 'Boolean';\n//         flow.set(\"DropRequest010945\",true,\"store\")\n//     }\n//     return[msg,msg1]\n// }\n// if (command == '010940_Status') {\n//     var msg1 = msg\n//     //if Drop action\n//     if (isLoadingValue) {\n//         msg1.topic = 'ns=3;s=\"DB85_RcvAMR\".\"DropRequest010940\"';\n//         msg1.datatype = 'Boolean';\n//         flow.set(\"DropRequest010940\", true, \"store\")\n//     }\n//     return [msg, msg1]\n// }\n// if (command == '010935_Status') {\n//     var msg1 = msg\n//     //if Drop action\n//     if (isLoadingValue) {\n//         msg1.topic = 'ns=3;s=\"DB85_RcvAMR\".\"DropRequest010935\"';\n//         msg1.datatype = 'Boolean';\n//         flow.set(\"DropRequest010935\", true, \"store\")\n//     }\n//     return [msg, msg1]\n// }\n// if (command == '010930_Status') {\n//     var msg1 = msg\n//     //if Drop action\n//     if (isLoadingValue) {\n//         msg1.topic = 'ns=3;s=\"DB85_RcvAMR\".\"DropRequest010930\"';\n//         msg1.datatype = 'Boolean';\n//         flow.set(\"DropRequest010930\", true, \"store\")\n//     }\n//     return [msg, msg1]\n// }\n// if (command == '010925_Status') {\n//     var msg1 = msg\n//     //if Drop action\n//     if (isLoadingValue) {\n//         msg1.topic = 'ns=3;s=\"DB85_RcvAMR\".\"DropRequest010925\"';\n//         msg1.datatype = 'Boolean';\n//         flow.set(\"DropRequest010925\", true, \"store\")\n//     }\n//     return [msg, msg1]\n// }\n// if (command == '010920_Status') {\n//     var msg1 = msg\n//     //if Drop action\n//     if (isLoadingValue) {\n//         msg1.topic = 'ns=3;s=\"DB85_RcvAMR\".\"DropRequest010920\"';\n//         msg1.datatype = 'Boolean';\n//         flow.set(\"DropRequest010920\", true, \"store\")\n//     }\n//     return [msg, msg1]\n// }\n// if (command == '010915_Status') {\n//     var msg1 = msg\n//     //if Drop action\n//     if (isLoadingValue) {\n//         msg1.topic = 'ns=3;s=\"DB85_RcvAMR\".\"DropRequest010915\"';\n//         msg1.datatype = 'Boolean';\n//         flow.set(\"DropRequest010915\", true, \"store\")\n//     }\n//     return [msg, msg1]\n// }\n// if (command == '010910_Status') {\n//     var msg1 = msg\n//     //if Drop action\n//     if (isLoadingValue) {\n//         msg1.topic = 'ns=3;s=\"DB85_RcvAMR\".\"DropRequest010910\"';\n//         msg1.datatype = 'Boolean';\n//         flow.set(\"DropRequest010910\", true, \"store\")\n//     }\n//     return [msg, msg1]\n// }\n// if (command == '010905_Status') {\n//     var msg1 = msg\n//     //if Drop action\n//     if (isLoadingValue) {\n//         msg1.topic = 'ns=3;s=\"DB85_RcvAMR\".\"DropRequest010905\"';\n//         msg1.datatype = 'Boolean';\n//         flow.set(\"DropRequest010905\", true, \"store\")\n//     }\n//     return [msg, msg1]\n// }\n// if (command == '010900_Status') {\n//     var msg1 = msg\n//     //if Drop action\n//     if (isLoadingValue) {\n//         msg1.topic = 'ns=3;s=\"DB85_RcvAMR\".\"DropRequest010900\"';\n//         msg1.datatype = 'Boolean';\n//         flow.set(\"DropRequest010900\", true, \"store\")\n    \n//     }\n//     return [msg, msg1]\n    \n// }\n// // Drop conveyor\n// if (command === '010100_Status') {\n//     var msg1 = msg\n//     if (isLoadingValue) {\n//         msg1.topic = 'ns=3;s=\"DB85_RcvAMR\".\"DropRequest010100\"';\n//         msg1.datatype = 'Boolean';\n//         flow.set(\"DropRequest010100\", true, \"store\")\n//     }\n//     return [msg, msg1]\n// }\n\n// //pick conveyor\n// if (command === '011000_Status') {\n//     var msg1 = msg\n//     if (!isLoadingValue) {\n//         msg.topic = 'ns=3;s=\"DB85_RcvAMR\".\"PickRequest011000\"'\n//         msg1.datatype = 'Boolean';\n//         flow.set(\"PickRequest011000\", true, \"store\")\n//     }\n//     return [msg, msg1]\n// }\n\n\n\nreturn[msg,null]",
+        "outputs": 2,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 410,
+        "y": 240,
+        "wires": [
+            [
+                "5039912625a03042",
+                "9ea8100783c5385a",
+                "1f17820f20758be8"
+            ],
+            [
+                "42b78f8f330c70c2",
+                "db6fb1af2d6b2407"
+            ]
+        ]
+    },
+    {
+        "id": "5039912625a03042",
+        "type": "http request",
+        "z": "5930649fc80f0e29",
+        "name": "send args to rcs, robot can go",
+        "method": "POST",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "http://10.203.207.88:9003//api/quicktron/rcs/equipment/feedback",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 800,
+        "y": 180,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "9ea8100783c5385a",
+        "type": "function",
+        "z": "5930649fc80f0e29",
+        "name": "response to rcs",
+        "func": "msg.payload={\n    \"success\":true\n}\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 750,
+        "y": 240,
+        "wires": [
+            [
+                "08e1257c3fca4dbc"
+            ]
+        ]
+    },
+    {
+        "id": "08e1257c3fca4dbc",
+        "type": "http response",
+        "z": "5930649fc80f0e29",
+        "name": "response",
+        "statusCode": "200",
+        "headers": {
+            "content-type": "application/json"
+        },
+        "x": 910,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "42b78f8f330c70c2",
+        "type": "function",
+        "z": "5930649fc80f0e29",
+        "name": "Drop Or Pick Request for OPC",
+        "func": "//set payload to true\nmsg.payload=true\nnode.warn(\"Request write\");\nnode.warn(msg.topic)\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 800,
+        "y": 300,
+        "wires": [
+            [
+                "6ea825f82dd0b2bd",
+                "f8289734c7218a9a"
+            ]
+        ]
+    },
+    {
+        "id": "6ea825f82dd0b2bd",
+        "type": "link out",
+        "z": "5930649fc80f0e29",
+        "name": "link out 13",
+        "mode": "link",
+        "links": [
+            "53e899ca5e59b6c3"
+        ],
+        "x": 965,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "e126de887ed2175d",
+        "type": "function",
+        "z": "5930649fc80f0e29",
+        "name": "check door args ",
+        "func": "var message = msg.payload\nvar doorCode = message.doorCode\nmessage.actionCode = 'OPEN'\n//node.warn(\"opendoor request\"+doorCode);\nvar doorCodes = global.get(\"DoorCodes\")\nfor (let index = 0; index < doorCodes.length; index++) {\n    const element = doorCodes[index];\n    if (doorCode == element) \n    {\n        flow.set(\"openArg_DropEnable\"+doorCode, message, \"store\")\n    }\n}\n\nif (doorCode === \"010945\") {\n    flow.set(\"openArg_DropEnable010945\",message,\"store\")\n}\nif (doorCode === \"010940\") {\n    flow.set(\"openArg_DropEnable010940\", message, \"store\")\n}\nif (doorCode === \"010935\") {\n    flow.set(\"openArg_DropEnable010935\", message, \"store\")\n}\nif (doorCode === \"010930\") {\n    flow.set(\"openArg_DropEnable010930\", message, \"store\")\n}\nif (doorCode === \"010925\") {\n    flow.set(\"openArg_DropEnable010925\", message, \"store\")\n}\nif (doorCode === \"010920\") {\n    flow.set(\"openArg_DropEnable010920\", message, \"store\")\n}\nif (doorCode === \"010915\") {\n    flow.set(\"openArg_DropEnable010915\", message, \"store\")\n}\nif (doorCode === \"010910\") {\n    flow.set(\"openArg_DropEnable010910\", message, \"store\")\n}\nif (doorCode === \"010905\") {\n    flow.set(\"openArg_DropEnable010905\", message, \"store\")\n}\nif (doorCode === \"010900\") {\n    flow.set(\"openArg_DropEnable010900\", message, \"store\")\n}\nif(doorCode == \"requestDoor_2\")\n{\n    flow.set(\"openArg_DropEnablerequestDoor_2\", message, \"store\")\n}\n\n//Drop conveyor door\nif (doorCode === '010100') {\n    flow.set(\"openArg_DropEnable010100\", message, \"store\")\n}\n//Pick conveyor door\nif (doorCode === '011000') {\n    flow.set(\"openArg_PickEnable011000\", message, \"store\")\n}\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 380,
+        "y": 640,
+        "wires": [
+            [
+                "1c7b557788922b27"
+            ]
+        ]
+    },
+    {
+        "id": "4029cb790b6241ab",
+        "type": "link in",
+        "z": "5930649fc80f0e29",
+        "name": "link in 14",
+        "links": [
+            "6c3320fb80db6780",
+            "46d53b29f1fe74f9",
+            "48edb3f1e5b2e68a"
+        ],
+        "x": 205,
+        "y": 640,
+        "wires": [
+            [
+                "e126de887ed2175d"
+            ]
+        ]
+    },
+    {
+        "id": "1c7b557788922b27",
+        "type": "function",
+        "z": "5930649fc80f0e29",
+        "name": "response to rcs",
+        "func": "msg.payload={\n    \"success\":true\n}\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 600,
+        "y": 640,
+        "wires": [
+            [
+                "ec02c42ec093b408"
+            ]
+        ]
+    },
+    {
+        "id": "ec02c42ec093b408",
+        "type": "http response",
+        "z": "5930649fc80f0e29",
+        "name": "response",
+        "statusCode": "200",
+        "headers": {
+            "content-type": "application/json"
+        },
+        "x": 780,
+        "y": 640,
+        "wires": []
+    },
+    {
+        "id": "edb2145b8ed34023",
+        "type": "comment",
+        "z": "5930649fc80f0e29",
+        "name": "Open Door Args",
+        "info": "",
+        "x": 280,
+        "y": 600,
+        "wires": []
+    },
+    {
+        "id": "196490ff1e0c142e",
+        "type": "comment",
+        "z": "5930649fc80f0e29",
+        "name": "Device Communication Args,agv come",
+        "info": "",
+        "x": 300,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "9f5bd31a17943c03",
+        "type": "link in",
+        "z": "5930649fc80f0e29",
+        "name": "link in 15",
+        "links": [
+            "59f701d8f49b504e",
+            "160f89d12388fd5f"
+        ],
+        "x": 215,
+        "y": 840,
+        "wires": [
+            [
+                "6fa63d42856ca7b7"
+            ]
+        ]
+    },
+    {
+        "id": "6fa63d42856ca7b7",
+        "type": "function",
+        "z": "5930649fc80f0e29",
+        "name": "check drop or pickbable data",
+        "func": "var nodeItems = msg.items;\nvar values = msg.payload\n\n//read if enabled\n\nif (nodeItems != null && nodeItems.length > 0) {\n    for (var i = 0; i < nodeItems.length; i++) {\n        var value = values[i]['value']['value']\n        var nodeId = nodeItems[i]['nodeId']\n        //if enable,则判断当前是否有请求的参数 and request door args\n        if (value == true || value == 1) {\n            var openArgKey = getDoorNoByNodeId(nodeId)\n            var openArgData = flow.get(openArgKey, \"store\") || 0\n            //if  dropEnable and have door request args <>><><><>\n            var dropOrPickRequestKey = getDropOrPickRequestByNodeId(nodeId)\n            var dropOrPickRequestData = flow.get(dropOrPickRequestKey, \"store\") || 0\n            if (openArgData != 0 ) {\n                node.warn(nodeId+\",\"+openArgData.toString()+\",\"+openArgKey)\n                msg.parameterOpenDoor = openArgKey\n                msg.parameterDropOrPickRequest = dropOrPickRequestKey\n                msg.dropOrPickRequestData = dropOrPickRequestData\n                msg.payload = openArgData\n                node.send(msg)\n            }\n\n        }\n    }\n}\n\nreturn null;\n\n//通过NodeId关联到 openArg 的key\nfunction getDoorNoByNodeId(nodeId) {\n  \n    nodeId = nodeId.toString()\n    var newId = nodeId.split(\"\\.\")[1]\n    newId = newId.replaceAll('\"', '')\n    newId = \"openArg_\" + newId\n    return newId\n}\n\n//getDropRequest\nfunction getDropOrPickRequestByNodeId(nodeId) {\n    nodeId = nodeId.toString()\n    var newId = nodeId.split(\"\\.\")[1]\n    newId = newId.replaceAll('\"', '').replaceAll(\"DropEnable\", \"DropRequest\").replaceAll(\"PickEnable\", \"PickRequest\")\n    return newId\n}\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 400,
+        "y": 840,
+        "wires": [
+            [
+                "26e51697f5862bf0",
+                "d29117312e2774df",
+                "3c3804650206740a"
+            ]
+        ]
+    },
+    {
+        "id": "3daec5ace35afc4c",
+        "type": "comment",
+        "z": "5930649fc80f0e29",
+        "name": "Device Communication can go",
+        "info": "",
+        "x": 790,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "26e51697f5862bf0",
+        "type": "http request",
+        "z": "5930649fc80f0e29",
+        "name": "send args to rcs, robot can go door",
+        "method": "POST",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "http://10.203.207.88:9003/api/quicktron/door/command-finish",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 680,
+        "y": 840,
+        "wires": [
+            [
+                "9b6b8db32ef1da01"
+            ]
+        ]
+    },
+    {
+        "id": "d29117312e2774df",
+        "type": "function",
+        "z": "5930649fc80f0e29",
+        "name": "Set Drop Busy for OPC",
+        "func": "var message = msg.payload\nvar dropOrPickRequestData=msg.dropOrPickRequestData\nvar doorCode = message.doorCode\nnode.warn(doorCode);\n//先打印\nnode.warn(dropOrPickRequestData == undefined)\nnode.warn(dropOrPickRequestData.toString());\nnode.warn(\"观察结果dropOrPickRequestData\")\nnode.warn(dropOrPickRequestData==0)\n\nif(dropOrPickRequestData==0) {return null}\nnode.warn(\"写入 dropBusy>>>\"+doorCode)\n\nif (doorCode === \"010945\") {\n    var msg1={}\n    msg1.topic='ns=3;s=\"DB85_RcvAMR\".\"DropBusy010945\"'\n    msg1.datatype = 'Boolean';\n    msg1.payload=true\n    flow.set(\"DropBusyRequest010945\", true, \"store\")\n    return msg1;\n}\nif (doorCode === \"010940\") {\n    var msg2 = {}\n    msg2.topic = 'ns=3;s=\"DB85_RcvAMR\".\"DropBusy010940\"'\n    msg2.datatype = 'Boolean';\n    msg2.payload = true\n    flow.set(\"DropBusyRequest010940\", true, \"store\")\n    return msg2;\n}\nif (doorCode === \"010935\") {\n    var msg3 = {}\n    msg3.topic = 'ns=3;s=\"DB85_RcvAMR\".\"DropBusy010935\"'\n    msg3.datatype = 'Boolean';\n    msg3.payload = true\n    flow.set(\"DropBusyRequest010935\", true, \"store\")\n    return msg3;\n}\nif (doorCode === \"010930\") {\n    var msg4 = {}\n    msg4.topic = 'ns=3;s=\"DB85_RcvAMR\".\"DropBusy010930\"'\n    msg4.datatype = 'Boolean';\n    msg4.payload = true\n    flow.set(\"DropBusyRequest010930\", true, \"store\")\n    return msg4;\n}\nif (doorCode === \"010925\") {\n    var msg5 = {}\n    msg5.topic = 'ns=3;s=\"DB85_RcvAMR\".\"DropBusy010925\"'\n    msg5.datatype = 'Boolean';\n    msg5.payload = true\n    flow.set(\"DropBusyRequest010925\", true, \"store\")\n    return msg5;\n}\nif (doorCode === \"010920\") {\n    var msg6 = {}\n    msg6.topic = 'ns=3;s=\"DB85_RcvAMR\".\"DropBusy010920\"'\n    msg6.datatype = 'Boolean';\n    msg6.payload = true\n    flow.set(\"DropBusyRequest010920\", true, \"store\")\n    return msg6;\n}\nif (doorCode === \"010915\") {\n    var msg7 = {}\n    msg7.topic = 'ns=3;s=\"DB85_RcvAMR\".\"DropBusy010915\"'\n    msg7.datatype = 'Boolean';\n    msg7.payload = true\n    flow.set(\"DropBusyRequest010915\", true, \"store\")\n    return msg7;\n}\nif (doorCode === \"010910\") {\n    var msg8 = {}\n    msg8.topic = 'ns=3;s=\"DB85_RcvAMR\".\"DropBusy010910\"'\n    msg8.datatype = 'Boolean';\n    msg8.payload = true\n    flow.set(\"DropBusyRequest010910\", true, \"store\")\n    return msg8;\n}\nif (doorCode === \"010905\") {\n    var msg9 = {}\n    msg9.topic = 'ns=3;s=\"DB85_RcvAMR\".\"DropBusy010905\"'\n    msg9.datatype = 'Boolean';\n    msg9.payload = true\n    flow.set(\"DropBusyRequest010905\", true, \"store\")\n    return msg9;\n}\nif (doorCode === \"010900\") {\n    var msg10 = {}\n    msg10.topic = 'ns=3;s=\"DB85_RcvAMR\".\"DropBusy010900\"'\n    msg10.datatype = 'Boolean';\n    msg10.payload = true\n    flow.set(\"DropBusyRequest010900\", true, \"store\")\n    return msg10;\n}\n\n// drop conveyor\nif (doorCode == '010100') {\n    var msg11 = {}\n    msg11.topic = 'ns=3;s=\"DB85_RcvAMR\".\"DropBusy010100\"'\n    msg11.datatype = 'Boolean';\n    msg11.payload = true\n    flow.set(\"DropBusyRequest010100\", true, \"store\")\n    return msg11;\n}\n//pick conveyor \nif (doorCode == '011000') {\n    var msg12 = {}\n    msg12.topic = 'ns=3;s=\"DB85_RcvAMR\".\"PickBusy011000\"'\n    msg12.datatype = 'Boolean';\n    msg12.payload = true\n    flow.set(\"PickBusyRequest011000\", true, \"store\")\n    return msg12;\n}\n\nreturn null;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 650,
+        "y": 900,
+        "wires": [
+            [
+                "bb14a5a06e8c514a"
+            ]
+        ]
+    },
+    {
+        "id": "9b6b8db32ef1da01",
+        "type": "function",
+        "z": "5930649fc80f0e29",
+        "name": "if rcs return success, delete flow key （door open,dropRequest）",
+        "func": "var response = msg.payload\nvar doorKey = msg.parameterOpenDoor\nvar dropOrPickRequestKey = msg.parameterDropOrPickRequest\n//表示已经发送了开门的信号\nif (response != undefined && response != null && response.success == true) {\n    //删除开门的标识符号\n    flow.set(doorKey, undefined, 'store')\n    //删除 dropRequest的标识符\n    flow.set(dropOrPickRequestKey, undefined, 'store')\n}\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1130,
+        "y": 840,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "bb14a5a06e8c514a",
+        "type": "link out",
+        "z": "5930649fc80f0e29",
+        "name": "link out 16",
+        "mode": "link",
+        "links": [
+            "2f0777ce5d37c8ce"
+        ],
+        "x": 835,
+        "y": 900,
+        "wires": []
+    },
+    {
+        "id": "a504c30e5942a661",
+        "type": "link in",
+        "z": "5930649fc80f0e29",
+        "name": "link in 17",
+        "links": [
+            "805c77aa98b1904a"
+        ],
+        "x": 165,
+        "y": 480,
+        "wires": [
+            [
+                "d3d08417784b862c"
+            ]
+        ]
+    },
+    {
+        "id": "d3d08417784b862c",
+        "type": "function",
+        "z": "5930649fc80f0e29",
+        "name": "when agv leave station reset signal",
+        "func": "var message=msg.payload\nvar command = message.command\nvar commandString = '_Close'\nvar isLoadingValue = message.isLoading\nnode.warn(\"leave station:::\"+command);\nvar msg1 = {}\nvar msg2 = {}\nvar dropDoorCodes = global.get(\"DoorCodes\")\nvar pickDoorCodes = global.get(\"pickDoorCodes\")\nfor (let index = 0; index < dropDoorCodes.length; index++) \n{\n    const element = dropDoorCodes[index];\n    if (command == element + commandString) \n    {\n        // reset variant  \n        flow.set(\"DropBusyRequest\"+element, undefined, \"store\")\n        //reset opc drop request and drop busy\n\n        msg1.topic = 'ns=3;s=\"DB85_RcvAMR\".\"DropRequest\"'+element;\n        msg1.datatype = 'Boolean';\n        msg1.payload = false\n\n        msg2.topic = 'ns=3;s=\"DB85_RcvAMR\".\"DropBusy\"'+element\n        msg2.datatype = 'Boolean';\n        msg2.payload = false\n        return [msg1, msg2]\n    }\n\n }\n\n\nfor (let index = 0; index < pickDoorCodes.length; index++) {\n    const element = pickDoorCodes[index];\n    if (command == element + commandString) {\n           // reset variant  \n    flow.set(\"PickBusyRequest\"+element, undefined, \"store\")\n    //reset opc drop request and drop busy\n\n    msg1.topic = 'ns=3;s=\"DB85_RcvAMR\".\"PickRequest\"'+element;\n    msg1.datatype = 'Boolean';\n    msg1.payload = false\n\n        msg2.topic = 'ns=3;s=\"DB85_RcvAMR\".\"PickBusy\"' + element\n    msg2.datatype = 'Boolean';\n    msg2.payload = false\n    return [msg1, msg2]\n    }\n\n}\n// //which buffer location\n// if (command =='010945_Close'){\n//     // reset variant  \n//     flow.set(\"DropBusyRequest010945\",undefined,\"store\")\n//     //reset opc drop request and drop busy\n    \n//     msg1.topic = 'ns=3;s=\"DB85_RcvAMR\".\"DropRequest010945\"';\n//     msg1.datatype = 'Boolean';\n//     msg1.payload=false\n\n//     msg2.topic = 'ns=3;s=\"DB85_RcvAMR\".\"DropBusy010945\"'\n//     msg2.datatype = 'Boolean';\n//     msg2.payload = false\n//     return [msg1,msg2]\n// }\n// else if (command == '010940_Close') {\n//     // reset variant  \n//     flow.set(\"DropBusyRequest010940\", undefined, \"store\")\n//     //reset opc drop request and drop busy\n\n//     msg1.topic = 'ns=3;s=\"DB85_RcvAMR\".\"DropRequest010940\"';\n//     msg1.datatype = 'Boolean';\n//     msg1.payload = false\n\n//     msg2.topic = 'ns=3;s=\"DB85_RcvAMR\".\"DropBusy010940\"'\n//     msg2.datatype = 'Boolean';\n//     msg2.payload = false\n//     return [msg1, msg2]\n// }\n// if (command == '010935_Close') {\n//     // reset variant  \n//     flow.set(\"DropBusyRequest010935\", undefined, \"store\")\n//     //reset opc drop request and drop busy\n\n//     msg1.topic = 'ns=3;s=\"DB85_RcvAMR\".\"DropRequest010935\"';\n//     msg1.datatype = 'Boolean';\n//     msg1.payload = false\n\n//     msg2.topic = 'ns=3;s=\"DB85_RcvAMR\".\"DropBusy010935\"'\n//     msg2.datatype = 'Boolean';\n//     msg2.payload = false\n//     return [msg1, msg2]\n// }\n// if (command == '010930_Close') {\n//     // reset variant  \n//     flow.set(\"DropBusyRequest010930\", undefined, \"store\")\n//     //reset opc drop request and drop busy\n\n//     msg1.topic = 'ns=3;s=\"DB85_RcvAMR\".\"DropRequest010930\"';\n//     msg1.datatype = 'Boolean';\n//     msg1.payload = false\n\n//     msg2.topic = 'ns=3;s=\"DB85_RcvAMR\".\"DropBusy010930\"'\n//     msg2.datatype = 'Boolean';\n//     msg2.payload = false\n//     return [msg1, msg2]\n// }\n// if (command == '010925_Close') {\n//     // reset variant  \n//     flow.set(\"DropBusyRequest010925\", undefined, \"store\")\n//     //reset opc drop request and drop busy\n\n//     msg1.topic = 'ns=3;s=\"DB85_RcvAMR\".\"DropRequest010925\"';\n//     msg1.datatype = 'Boolean';\n//     msg1.payload = false\n\n//     msg2.topic = 'ns=3;s=\"DB85_RcvAMR\".\"DropBusy010925\"'\n//     msg2.datatype = 'Boolean';\n//     msg2.payload = false\n//     return [msg1, msg2]\n// }\n// if (command == '010920_Close') {\n//     // reset variant  \n//     flow.set(\"DropBusyRequest010920\", undefined, \"store\")\n//     //reset opc drop request and drop busy\n\n//     msg1.topic = 'ns=3;s=\"DB85_RcvAMR\".\"DropRequest010920\"';\n//     msg1.datatype = 'Boolean';\n//     msg1.payload = false\n\n//     msg2.topic = 'ns=3;s=\"DB85_RcvAMR\".\"DropBusy010920\"'\n//     msg2.datatype = 'Boolean';\n//     msg2.payload = false\n//     return [msg1, msg2]\n// }\n// if (command == '010915_Close') {\n//     // reset variant  \n//     flow.set(\"DropBusyRequest010915\", undefined, \"store\")\n//     //reset opc drop request and drop busy\n\n//     msg1.topic = 'ns=3;s=\"DB85_RcvAMR\".\"DropRequest010915\"';\n//     msg1.datatype = 'Boolean';\n//     msg1.payload = false\n\n//     msg2.topic = 'ns=3;s=\"DB85_RcvAMR\".\"DropBusy010915\"'\n//     msg2.datatype = 'Boolean';\n//     msg2.payload = false\n//     return [msg1, msg2]\n// }\n// if (command == '010910_Close') {\n//     // reset variant  \n//     flow.set(\"DropBusyRequest010910\", undefined, \"store\")\n//     //reset opc drop request and drop busy\n\n//     msg1.topic = 'ns=3;s=\"DB85_RcvAMR\".\"DropRequest010910\"';\n//     msg1.datatype = 'Boolean';\n//     msg1.payload = false\n\n//     msg2.topic = 'ns=3;s=\"DB85_RcvAMR\".\"DropBusy010910\"'\n//     msg2.datatype = 'Boolean';\n//     msg2.payload = false\n//     return [msg1, msg2]\n// }\n// if (command == '010905_Close') {\n//     // reset variant  \n//     flow.set(\"DropBusyRequest010905\", undefined, \"store\")\n//     //reset opc drop request and drop busy\n\n//     msg1.topic = 'ns=3;s=\"DB85_RcvAMR\".\"DropRequest010905\"';\n//     msg1.datatype = 'Boolean';\n//     msg1.payload = false\n\n//     msg2.topic = 'ns=3;s=\"DB85_RcvAMR\".\"DropBusy010905\"'\n//     msg2.datatype = 'Boolean';\n//     msg2.payload = false\n//     return [msg1, msg2]\n// }\n// if (command == '010900_Close') {\n//     // reset variant  \n//     flow.set(\"DropBusyRequest010900\", undefined, \"store\")\n//     //reset opc drop request and drop busy\n\n//     msg1.topic = 'ns=3;s=\"DB85_RcvAMR\".\"DropRequest010900\"';\n//     msg1.datatype = 'Boolean';\n//     msg1.payload = false\n\n//     msg2.topic = 'ns=3;s=\"DB85_RcvAMR\".\"DropBusy010900\"'\n//     msg2.datatype = 'Boolean';\n//     msg2.payload = false\n//     return [msg1, msg2]\n// }\n\n// //Drop conveyor\n// if (command == '010100_Close') {\n//     // reset variant  \n//     flow.set(\"DropBusyRequest010100\", undefined, \"store\")\n//     //reset opc drop request and drop busy\n\n//     msg1.topic = 'ns=3;s=\"DB85_RcvAMR\".\"DropRequest010100\"';\n//     msg1.datatype = 'Boolean';\n//     msg1.payload = false\n\n//     msg2.topic = 'ns=3;s=\"DB85_RcvAMR\".\"DropBusy010100\"'\n//     msg2.datatype = 'Boolean';\n//     msg2.payload = false\n//     return [msg1, msg2]\n// }\n// //Pick Conveyor\n// if (command == '011000_Close') {\n//     // reset variant  \n//     flow.set(\"PickBusyRequest011000\", undefined, \"store\")\n//     //reset opc drop request and drop busy\n\n//     msg1.topic = 'ns=3;s=\"DB85_RcvAMR\".\"PickRequest011000\"';\n//     msg1.datatype = 'Boolean';\n//     msg1.payload = false\n\n//     msg2.topic = 'ns=3;s=\"DB85_RcvAMR\".\"PickBusy011000\"'\n//     msg2.datatype = 'Boolean';\n//     msg2.payload = false\n//     return [msg1, msg2]\n// }\n\nreturn[null,null]",
+        "outputs": 2,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 360,
+        "y": 480,
+        "wires": [
+            [
+                "11ec049c0e0b739d"
+            ],
+            [
+                "53d429a103384f79"
+            ]
+        ]
+    },
+    {
+        "id": "1f17820f20758be8",
+        "type": "debug",
+        "z": "5930649fc80f0e29",
+        "name": "debug 95",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 560,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "f8289734c7218a9a",
+        "type": "debug",
+        "z": "5930649fc80f0e29",
+        "name": "debug 96",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 900,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "64ba8cb4c9f16d4d",
+        "type": "comment",
+        "z": "5930649fc80f0e29",
+        "name": "Lack logic",
+        "info": "",
+        "x": 260,
+        "y": 440,
+        "wires": []
+    },
+    {
+        "id": "11ec049c0e0b739d",
+        "type": "link out",
+        "z": "5930649fc80f0e29",
+        "name": "link out 18",
+        "mode": "link",
+        "links": [
+            "be2645f9ab59c74a"
+        ],
+        "x": 605,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "53d429a103384f79",
+        "type": "link out",
+        "z": "5930649fc80f0e29",
+        "name": "link out 19",
+        "mode": "link",
+        "links": [
+            "db0e262e952860ff"
+        ],
+        "x": 605,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "db6fb1af2d6b2407",
+        "type": "debug",
+        "z": "5930649fc80f0e29",
+        "name": "debug 99",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 520,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "8008c30f835749da",
+        "type": "inject",
+        "z": "5930649fc80f0e29",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "3",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 260,
+        "y": 740,
+        "wires": [
+            [
+                "0ffb7b10d2c18108"
+            ]
+        ]
+    },
+    {
+        "id": "0ffb7b10d2c18108",
+        "type": "function",
+        "z": "5930649fc80f0e29",
+        "name": "when agv leave station, feebback door command",
+        "func": "var keyset=flow.keys(\"store\")||0\n\nif(keyset!=0 && keyset.length>0){\n    for(var i=0;i<keyset.length;i++){\n        var key=keyset[i]\n    \n        if(key.toString().indexOf(\"openArg_\")>=0){\n             var openDorData=flow.get(key,\"store\")\n            //判断是否有Request标识符,如果没有,则直接feedback\n            var dropKey=getRequestFlagByOpenArg(key)\n            var dropData=flow.get(dropKey,\"store\")||0\n            //表示当前的key可以feedback\n            if(dropData==0 && openDorData!=0){\n                  msg.key=key,\n                  msg.payload=openDorData\n                  node.warn(\"通过定时任务放行\"+key);\n                  node.send(msg)  \n            }\n        }\n    }\n}\nreturn null;\n\n//获取对应的Request的key\nfunction getRequestFlagByOpenArg(openArgKey){\n    var requestKey=openArgKey.toString().replaceAll(\"openArg_\",\"\").replaceAll(\"DropEnable\",\"DropRequest\").replaceAll(\"PickEnable\",\"PickRequest\")\n    return requestKey;\n}",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 550,
+        "y": 740,
+        "wires": [
+            [
+                "359c12cbd836d746",
+                "e1e5d492c06330be"
+            ]
+        ]
+    },
+    {
+        "id": "62b98cab41caa9d4",
+        "type": "function",
+        "z": "5930649fc80f0e29",
+        "name": "if return success,delete flow doorkey",
+        "func": "var response = msg.payload\nvar doorKey = msg.key\n\n//表示已经发送了开门的信号\nif (response != undefined && response != null && response.success == true) {\n    //删除开门的标识符号\n    flow.set(doorKey, undefined, 'store')\n}",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1270,
+        "y": 740,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "359c12cbd836d746",
+        "type": "http request",
+        "z": "5930649fc80f0e29",
+        "name": "send args to rcs, robot can go door",
+        "method": "POST",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "http://10.203.207.88:9003/api/quicktron/door/command-finish",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 920,
+        "y": 740,
+        "wires": [
+            [
+                "62b98cab41caa9d4"
+            ]
+        ]
+    },
+    {
+        "id": "e1e5d492c06330be",
+        "type": "debug",
+        "z": "5930649fc80f0e29",
+        "name": "debug 100",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 790,
+        "y": 780,
+        "wires": []
+    },
+    {
+        "id": "e629d248ea83b742",
+        "type": "comment",
+        "z": "5930649fc80f0e29",
+        "name": "sometime request not write success",
+        "info": "",
+        "x": 320,
+        "y": 1120,
+        "wires": []
+    },
+    {
+        "id": "6e9ae7c6d5f437a3",
+        "type": "function",
+        "z": "5930649fc80f0e29",
+        "name": "rewrite request to opc",
+        "func": "var keyset=flow.keys(\"store\")||0\n\nif(keyset!=0 && keyset.length>0){\n    for(var i=0;i<keyset.length;i++){\n        var key=keyset[i]\n    \n       //if exist key ,rewrite to plc\n        if(key.toString().indexOf(\"DropRequest\")>=0|| key.toString().indexOf(\"PickRequest\")>=0){\n\n            msg.topic = 'ns=3;s=\"DB85_RcvAMR\".\"'+key+'\"';\n            msg.datatype = 'Boolean';\n            msg.payload=true\n            node.send(msg);\n        }\n    }\n}\nreturn null;\n\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 480,
+        "y": 1180,
+        "wires": [
+            [
+                "9206a4a31327b0c6"
+            ]
+        ]
+    },
+    {
+        "id": "0aec0a41f953e761",
+        "type": "inject",
+        "z": "5930649fc80f0e29",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "3",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 240,
+        "y": 1180,
+        "wires": [
+            [
+                "6e9ae7c6d5f437a3"
+            ]
+        ]
+    },
+    {
+        "id": "9206a4a31327b0c6",
+        "type": "link out",
+        "z": "5930649fc80f0e29",
+        "name": "link out 20",
+        "mode": "link",
+        "links": [
+            "ba132ab6718151ea"
+        ],
+        "x": 715,
+        "y": 1180,
+        "wires": []
+    },
+    {
+        "id": "3c3804650206740a",
+        "type": "debug",
+        "z": "5930649fc80f0e29",
+        "name": "debug 102",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 530,
+        "y": 960,
+        "wires": []
+    },
+    {
+        "id": "6051dd39ce2b94e7",
+        "type": "comment",
+        "z": "5930649fc80f0e29",
+        "name": "",
+        "info": "\n通用交互点:\n物流门:\n\n1,发起时机未定\n1,\n如果通用交互先发起:\n\n会写DropRequest，并放行 通用交互\n发起物流门:\n等待DropEnable的时候+(判断是否有Request), 放行 物流门\n\n2,如果先发起了门的请求; 未发起通用交互,可能被时间定时抢到,直接放行门\n\n后来又发起了通用交互，才写的request，没有等到Enable,那就无效了。",
+        "x": 850,
+        "y": 1100,
+        "wires": []
+    },
+    {
+        "id": "238ba81592fb3854",
+        "type": "inject",
+        "z": "5930649fc80f0e29",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 140,
+        "y": 300,
+        "wires": [
+            [
+                "d57e59ca1af61cfb"
+            ]
+        ]
+    },
+    {
+        "id": "567e9fbaf776029b",
+        "type": "inject",
+        "z": "5930649fc80f0e29",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 260,
+        "y": 60,
+        "wires": [
+            [
+                "c5cdbc8478e77d86"
+            ]
+        ]
+    },
+    {
+        "id": "c5cdbc8478e77d86",
+        "type": "subflow:f8f919c05e1bde09",
+        "z": "5930649fc80f0e29",
+        "name": "DoorCodes",
+        "x": 530,
+        "y": 60,
+        "wires": []
+    }
+]
