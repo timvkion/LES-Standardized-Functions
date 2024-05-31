@@ -1,0 +1,1514 @@
+[
+    {
+        "id": "458296d889c02e7c",
+        "type": "subflow",
+        "name": "RobotValues",
+        "info": "",
+        "category": "",
+        "in": [
+            {
+                "x": 60,
+                "y": 80,
+                "wires": [
+                    {
+                        "id": "f3b89af4d0baa75b"
+                    }
+                ]
+            }
+        ],
+        "out": [
+            {
+                "x": 1620,
+                "y": 160,
+                "wires": [
+                    {
+                        "id": "4d686ed65611b66b",
+                        "port": 0
+                    }
+                ]
+            },
+            {
+                "x": 1620,
+                "y": 280,
+                "wires": [
+                    {
+                        "id": "4d686ed65611b66b",
+                        "port": 0
+                    }
+                ]
+            }
+        ],
+        "env": [],
+        "meta": {},
+        "color": "#DDAA99"
+    },
+    {
+        "id": "208fc759f14f472a",
+        "type": "http request",
+        "z": "458296d889c02e7c",
+        "name": "",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "http://10.203.207.88:9003/api/quicktron/rss/warehouse/1/carrier/robots/query",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 350,
+        "y": 80,
+        "wires": [
+            [
+                "78417da8beb0ed83",
+                "b1e2ce1b47b74c95"
+            ]
+        ]
+    },
+    {
+        "id": "f3b89af4d0baa75b",
+        "type": "function",
+        "z": "458296d889c02e7c",
+        "name": "SetBody",
+        "func": "msg.payload = \n{\n    \"mapCode\":\"ZWIB\"\n}\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 200,
+        "y": 80,
+        "wires": [
+            [
+                "208fc759f14f472a"
+            ]
+        ]
+    },
+    {
+        "id": "78417da8beb0ed83",
+        "type": "split",
+        "z": "458296d889c02e7c",
+        "name": "",
+        "splt": "\\n",
+        "spltType": "str",
+        "arraySplt": 1,
+        "arraySpltType": "len",
+        "stream": false,
+        "addname": "",
+        "x": 530,
+        "y": 180,
+        "wires": [
+            [
+                "6d9560a1d7dd1135"
+            ]
+        ]
+    },
+    {
+        "id": "6d9560a1d7dd1135",
+        "type": "split",
+        "z": "458296d889c02e7c",
+        "name": "",
+        "splt": "\\n",
+        "spltType": "str",
+        "arraySplt": 1,
+        "arraySpltType": "len",
+        "stream": false,
+        "addname": "",
+        "x": 670,
+        "y": 180,
+        "wires": [
+            [
+                "fde911e73a7ad710"
+            ]
+        ]
+    },
+    {
+        "id": "fde911e73a7ad710",
+        "type": "json",
+        "z": "458296d889c02e7c",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 810,
+        "y": 180,
+        "wires": [
+            [
+                "273a54d8c5f7777d"
+            ]
+        ]
+    },
+    {
+        "id": "273a54d8c5f7777d",
+        "type": "split",
+        "z": "458296d889c02e7c",
+        "name": "",
+        "splt": "\\n",
+        "spltType": "str",
+        "arraySplt": 1,
+        "arraySpltType": "len",
+        "stream": false,
+        "addname": "",
+        "x": 950,
+        "y": 180,
+        "wires": [
+            [
+                "c8892d9de52858bd"
+            ]
+        ]
+    },
+    {
+        "id": "f4d92c0dd9797790",
+        "type": "split",
+        "z": "458296d889c02e7c",
+        "name": "",
+        "splt": "\\n",
+        "spltType": "str",
+        "arraySplt": 1,
+        "arraySpltType": "len",
+        "stream": false,
+        "addname": "",
+        "x": 1250,
+        "y": 180,
+        "wires": [
+            [
+                "4d686ed65611b66b"
+            ]
+        ]
+    },
+    {
+        "id": "c8892d9de52858bd",
+        "type": "function",
+        "z": "458296d889c02e7c",
+        "name": "Sort",
+        "func": "// Get the input array from msg.payload\nvar array = msg.payload;\nif(typeof(array) == 'boolean')\n    return msg;\n// Sort the array of objects based on the 'name' property\narray.sort(function (a, b) {\n    var robotA = a.robotCode; // Convert names to uppercase for case-insensitive comparison\n    var robotB = b.robotCode;\n    if (robotA < robotB) {\n        return 1;\n    }\n    if (robotA > robotB) {\n        return -1;\n    }\n    return 0;\n});\n\n// Set the sorted array as the output\nmsg.payload = array;\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1110,
+        "y": 180,
+        "wires": [
+            [
+                "f4d92c0dd9797790"
+            ]
+        ]
+    },
+    {
+        "id": "ef699f600706f61a",
+        "type": "comment",
+        "z": "458296d889c02e7c",
+        "name": "Power",
+        "info": "",
+        "x": 1650,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "edbfed69e1504e2d",
+        "type": "comment",
+        "z": "458296d889c02e7c",
+        "name": "Position",
+        "info": "",
+        "x": 1650,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "4d686ed65611b66b",
+        "type": "function",
+        "z": "458296d889c02e7c",
+        "name": "SetRobotCode",
+        "func": "var robotCode = msg.payload.robotCode\nflow.set(\"currentRobot\",robotCode)\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1420,
+        "y": 180,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "b1e2ce1b47b74c95",
+        "type": "uib-sender",
+        "z": "458296d889c02e7c",
+        "url": "Robot-Control",
+        "uibId": "5780b9f21f17104f",
+        "name": "",
+        "topic": "clear",
+        "passthrough": false,
+        "return": false,
+        "outputs": 0,
+        "x": 660,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "61106ecd327bf247",
+        "type": "subflow",
+        "name": "TrafficLightArea_Modbus",
+        "info": "",
+        "category": "",
+        "in": [
+            {
+                "x": 60,
+                "y": 240,
+                "wires": [
+                    {
+                        "id": "5a553df376a7267d"
+                    }
+                ]
+            }
+        ],
+        "out": [
+            {
+                "x": 1000,
+                "y": 240,
+                "wires": [
+                    {
+                        "id": "9edd5add8ce5bfb8",
+                        "port": 0
+                    }
+                ]
+            },
+            {
+                "x": 990,
+                "y": 540,
+                "wires": [
+                    {
+                        "id": "9edd5add8ce5bfb8",
+                        "port": 1
+                    }
+                ]
+            }
+        ],
+        "env": [
+            {
+                "name": "Area_Name",
+                "type": "str",
+                "value": ""
+            },
+            {
+                "name": "Modbus_IP",
+                "type": "str",
+                "value": ""
+            },
+            {
+                "name": "Adress_Green_1",
+                "type": "str",
+                "value": ""
+            },
+            {
+                "name": "Adress_Green_2",
+                "type": "str",
+                "value": ""
+            },
+            {
+                "name": "Adress_Green_3",
+                "type": "str",
+                "value": ""
+            },
+            {
+                "name": "Adress_Green_4",
+                "type": "str",
+                "value": ""
+            },
+            {
+                "name": "Adress_Red_1",
+                "type": "str",
+                "value": ""
+            },
+            {
+                "name": "Adress_Red_2",
+                "type": "str",
+                "value": ""
+            },
+            {
+                "name": "Adress_Red_3",
+                "type": "str",
+                "value": ""
+            },
+            {
+                "name": "Adress_Red_4",
+                "type": "str",
+                "value": ""
+            },
+            {
+                "name": "Area_Name2",
+                "type": "str",
+                "value": ""
+            }
+        ],
+        "meta": {},
+        "color": "#AAAA66",
+        "inputLabels": [
+            "Input Area_Name"
+        ],
+        "outputLabels": [
+            "Output for debug node Green light",
+            "Output for debug node Red light"
+        ],
+        "icon": "font-awesome/fa-lightbulb-o"
+    },
+    {
+        "id": "fbc49266aa0ccffb",
+        "type": "comment",
+        "z": "61106ecd327bf247",
+        "name": "Concept 2: Filter zone and controll separate IO ",
+        "info": "This gives the possibility to create\nparametrized trafficlights in subflow:\n- zone name\n- green adress\n- red adress",
+        "x": 310,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "5a553df376a7267d",
+        "type": "function",
+        "z": "61106ecd327bf247",
+        "name": "function 3",
+        "func": "// Assuming the incoming message object is stored in the variable 'msg'\n// You can access the input set of strings and the given set of strings using msg.payload\nconst givenName = env.get(\"Area_Name\");\nconst givenName2 = env.get(\"Area_Name2\");\ntry {\n    // Check if the required fields are present in the payload\n    if (!msg.payload) {\n        throw new Error(\"Invalid input payload\");\n    }\n\n    // Convert sets to arrays for easier comparison\n    const inputSet = Array.isArray(msg.payload) ? msg.payload : [];\n    //const givenSet = Array.isArray(TrafficLights) ? msg.payload.givenSet : [];\n\n    // Compare sets and create a list of booleans\n    const result = inputSet.includes(givenName) || inputSet.includes(givenName2);\n\n    // Create the output message with the list of booleans\n    msg.payload = result;\n\n    // Return the modified message object\n    return msg;\n\n} catch (error) {\n    // Handle errors\n    msg.payload = {\n        error: error.message || \"Error comparing sets\"\n    };\n\n    // Return the error message\n    return msg;\n}\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 200,
+        "y": 240,
+        "wires": [
+            [
+                "9edd5add8ce5bfb8"
+            ]
+        ]
+    },
+    {
+        "id": "9edd5add8ce5bfb8",
+        "type": "switch",
+        "z": "61106ecd327bf247",
+        "name": "",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "cont",
+                "v": "false",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "true",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 410,
+        "y": 240,
+        "wires": [
+            [
+                "d1c2b7e7a72be549",
+                "653862466e4680bb"
+            ],
+            [
+                "5be67fce9aada45a",
+                "42a4791536c592d8"
+            ]
+        ]
+    },
+    {
+        "id": "eebd310a57c21ff7",
+        "type": "comment",
+        "z": "61106ecd327bf247",
+        "name": "Output Green",
+        "info": "",
+        "x": 930,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "fe63756b639dd57f",
+        "type": "comment",
+        "z": "61106ecd327bf247",
+        "name": "Output Red",
+        "info": "",
+        "x": 930,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "5be67fce9aada45a",
+        "type": "function",
+        "z": "61106ecd327bf247",
+        "name": "function 74",
+        "func": "// Example code for resetting a Modbus output\nmsg.payload = {\n    value: 0,  // Set the value you want to write to the Modbus address\n};\nreturn msg;\n\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 670,
+        "y": 340,
+        "wires": [
+            [
+                "30878bda17cffbb9",
+                "5be08313d9385eba",
+                "b5a5f0a59b624531",
+                "c9dcd5e6ba01d769"
+            ]
+        ]
+    },
+    {
+        "id": "d1c2b7e7a72be549",
+        "type": "function",
+        "z": "61106ecd327bf247",
+        "name": "function 73",
+        "func": "msg.payload = {\n    value: 0,  // Set the value you want to write to the Modbus address\n};\nreturn msg;\n\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 670,
+        "y": 180,
+        "wires": [
+            [
+                "11207b12067ecd1e",
+                "3779f1bbd0774334",
+                "fd907d1e9e695cec",
+                "c7297629c95ba88a"
+            ]
+        ]
+    },
+    {
+        "id": "653862466e4680bb",
+        "type": "function",
+        "z": "61106ecd327bf247",
+        "name": "function 75",
+        "func": "msg.payload = {\n    value: 1,  // Set the value you want to write to the Modbus address\n};\nreturn msg;\n\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 670,
+        "y": 140,
+        "wires": [
+            [
+                "30878bda17cffbb9",
+                "5be08313d9385eba",
+                "b5a5f0a59b624531",
+                "c9dcd5e6ba01d769"
+            ]
+        ]
+    },
+    {
+        "id": "42a4791536c592d8",
+        "type": "function",
+        "z": "61106ecd327bf247",
+        "name": "function 76",
+        "func": "// Example code for resetting a Modbus output\nmsg.payload = {\n    value: 1,  // Set the value you want to write to the Modbus address\n};\nreturn msg;\n\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 670,
+        "y": 300,
+        "wires": [
+            [
+                "11207b12067ecd1e",
+                "3779f1bbd0774334",
+                "fd907d1e9e695cec",
+                "c7297629c95ba88a"
+            ]
+        ]
+    },
+    {
+        "id": "30878bda17cffbb9",
+        "type": "modbus-write",
+        "z": "61106ecd327bf247",
+        "name": "",
+        "showStatusActivities": false,
+        "showErrors": false,
+        "showWarnings": true,
+        "unitid": "",
+        "dataType": "Coil",
+        "adr": "$(Adress_Green_1)",
+        "quantity": "1",
+        "server": "19ccfb47f926e7f1",
+        "emptyMsgOnFail": false,
+        "keepMsgProperties": false,
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "x": 940,
+        "y": 80,
+        "wires": [
+            [],
+            []
+        ]
+    },
+    {
+        "id": "11207b12067ecd1e",
+        "type": "modbus-write",
+        "z": "61106ecd327bf247",
+        "name": "",
+        "showStatusActivities": false,
+        "showErrors": false,
+        "showWarnings": true,
+        "unitid": "",
+        "dataType": "Coil",
+        "adr": "$(Adress_Red_1)",
+        "quantity": "1",
+        "server": "19ccfb47f926e7f1",
+        "emptyMsgOnFail": false,
+        "keepMsgProperties": false,
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "x": 940,
+        "y": 380,
+        "wires": [
+            [],
+            []
+        ]
+    },
+    {
+        "id": "5be08313d9385eba",
+        "type": "modbus-write",
+        "z": "61106ecd327bf247",
+        "name": "",
+        "showStatusActivities": false,
+        "showErrors": false,
+        "showWarnings": true,
+        "unitid": "",
+        "dataType": "Coil",
+        "adr": "$(Adress_Green_2)",
+        "quantity": "1",
+        "server": "19ccfb47f926e7f1",
+        "emptyMsgOnFail": false,
+        "keepMsgProperties": false,
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "x": 940,
+        "y": 120,
+        "wires": [
+            [],
+            []
+        ]
+    },
+    {
+        "id": "b5a5f0a59b624531",
+        "type": "modbus-write",
+        "z": "61106ecd327bf247",
+        "name": "",
+        "showStatusActivities": false,
+        "showErrors": false,
+        "showWarnings": true,
+        "unitid": "",
+        "dataType": "Coil",
+        "adr": "$(Adress_Green_3)",
+        "quantity": "1",
+        "server": "19ccfb47f926e7f1",
+        "emptyMsgOnFail": false,
+        "keepMsgProperties": false,
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "x": 940,
+        "y": 160,
+        "wires": [
+            [],
+            []
+        ]
+    },
+    {
+        "id": "c9dcd5e6ba01d769",
+        "type": "modbus-write",
+        "z": "61106ecd327bf247",
+        "name": "",
+        "showStatusActivities": false,
+        "showErrors": false,
+        "showWarnings": true,
+        "unitid": "",
+        "dataType": "Coil",
+        "adr": "$(Adress_Green_4)",
+        "quantity": "1",
+        "server": "19ccfb47f926e7f1",
+        "emptyMsgOnFail": false,
+        "keepMsgProperties": false,
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "x": 940,
+        "y": 200,
+        "wires": [
+            [],
+            []
+        ]
+    },
+    {
+        "id": "3779f1bbd0774334",
+        "type": "modbus-write",
+        "z": "61106ecd327bf247",
+        "name": "",
+        "showStatusActivities": false,
+        "showErrors": false,
+        "showWarnings": true,
+        "unitid": "",
+        "dataType": "Coil",
+        "adr": "$(Adress_Red_2)",
+        "quantity": "1",
+        "server": "19ccfb47f926e7f1",
+        "emptyMsgOnFail": false,
+        "keepMsgProperties": false,
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "x": 940,
+        "y": 420,
+        "wires": [
+            [],
+            []
+        ]
+    },
+    {
+        "id": "fd907d1e9e695cec",
+        "type": "modbus-write",
+        "z": "61106ecd327bf247",
+        "name": "",
+        "showStatusActivities": false,
+        "showErrors": false,
+        "showWarnings": true,
+        "unitid": "",
+        "dataType": "Coil",
+        "adr": "$(Adress_Red_3)",
+        "quantity": "1",
+        "server": "19ccfb47f926e7f1",
+        "emptyMsgOnFail": false,
+        "keepMsgProperties": false,
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "x": 940,
+        "y": 460,
+        "wires": [
+            [],
+            []
+        ]
+    },
+    {
+        "id": "c7297629c95ba88a",
+        "type": "modbus-write",
+        "z": "61106ecd327bf247",
+        "name": "",
+        "showStatusActivities": false,
+        "showErrors": false,
+        "showWarnings": true,
+        "unitid": "",
+        "dataType": "Coil",
+        "adr": "$(Adress_Red_4)",
+        "quantity": "1",
+        "server": "19ccfb47f926e7f1",
+        "emptyMsgOnFail": false,
+        "keepMsgProperties": false,
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "x": 940,
+        "y": 500,
+        "wires": [
+            [],
+            []
+        ]
+    },
+    {
+        "id": "19ccfb47f926e7f1",
+        "type": "modbus-client",
+        "z": "61106ecd327bf247",
+        "name": "",
+        "clienttype": "tcp",
+        "bufferCommands": true,
+        "stateLogEnabled": false,
+        "queueLogEnabled": false,
+        "failureLogEnabled": true,
+        "tcpHost": "$(Modbus_IP)",
+        "tcpPort": "502",
+        "tcpType": "DEFAULT",
+        "serialPort": "/dev/ttyUSB",
+        "serialType": "RTU-BUFFERD",
+        "serialBaudrate": "9600",
+        "serialDatabits": "8",
+        "serialStopbits": "1",
+        "serialParity": "none",
+        "serialConnectionDelay": "100",
+        "serialAsciiResponseStartDelimiter": "0x3A",
+        "unit_id": 1,
+        "commandDelay": 1,
+        "clientTimeout": 1000,
+        "reconnectOnTimeout": true,
+        "reconnectTimeout": 2000,
+        "parallelUnitIdsAllowed": true,
+        "showWarnings": true,
+        "showLogs": true
+    },
+    {
+        "id": "a75fc2e37a329332",
+        "type": "subflow",
+        "name": "TrafficLightVisualizer",
+        "info": "",
+        "category": "",
+        "in": [
+            {
+                "x": 60,
+                "y": 80,
+                "wires": [
+                    {
+                        "id": "80f9f82086df658e"
+                    }
+                ]
+            }
+        ],
+        "out": [
+            {
+                "x": 1100,
+                "y": 160,
+                "wires": [
+                    {
+                        "id": "a525a75829da2122",
+                        "port": 0
+                    }
+                ]
+            }
+        ],
+        "env": [
+            {
+                "name": "Area_Name",
+                "type": "str",
+                "value": ""
+            },
+            {
+                "name": "Modbus_IP",
+                "type": "str",
+                "value": ""
+            },
+            {
+                "name": "Address_Green_1",
+                "type": "str",
+                "value": ""
+            },
+            {
+                "name": "Address_Green_2",
+                "type": "str",
+                "value": ""
+            },
+            {
+                "name": "Address_Green_3",
+                "type": "str",
+                "value": ""
+            },
+            {
+                "name": "Address_Green_4",
+                "type": "str",
+                "value": ""
+            },
+            {
+                "name": "Address_Red_1",
+                "type": "str",
+                "value": ""
+            },
+            {
+                "name": "Address_Red_2",
+                "type": "str",
+                "value": ""
+            },
+            {
+                "name": "Address_Red_3",
+                "type": "str",
+                "value": ""
+            },
+            {
+                "name": "Address_Red_4",
+                "type": "str",
+                "value": ""
+            },
+            {
+                "name": "Area_Name2",
+                "type": "str",
+                "value": ""
+            }
+        ],
+        "meta": {},
+        "color": "#DDAA99"
+    },
+    {
+        "id": "80f9f82086df658e",
+        "type": "subflow:61106ecd327bf247",
+        "z": "a75fc2e37a329332",
+        "name": "TrafficLight_1",
+        "env": [
+            {
+                "name": "Area_Name",
+                "value": "Area_Name",
+                "type": "env"
+            },
+            {
+                "name": "Modbus_IP",
+                "value": "Modbus_IP",
+                "type": "str"
+            },
+            {
+                "name": "Adress_Green_1",
+                "value": "Address_Green_1",
+                "type": "str"
+            },
+            {
+                "name": "Adress_Green_2",
+                "value": "Address_Green_2",
+                "type": "str"
+            },
+            {
+                "name": "Adress_Green_3",
+                "value": "Address_Green_3",
+                "type": "str"
+            },
+            {
+                "name": "Adress_Green_4",
+                "value": "Address_Green_4",
+                "type": "str"
+            },
+            {
+                "name": "Adress_Red_1",
+                "value": "Address_Red_1",
+                "type": "str"
+            },
+            {
+                "name": "Adress_Red_2",
+                "value": "Address_Red_2",
+                "type": "str"
+            },
+            {
+                "name": "Adress_Red_3",
+                "value": "Address_Red_3",
+                "type": "str"
+            },
+            {
+                "name": "Adress_Red_4",
+                "value": "Address_Red_4",
+                "type": "str"
+            },
+            {
+                "name": "Area_Name2",
+                "value": "Area_Name2",
+                "type": "str"
+            },
+            {
+                "name": "Name",
+                "value": "AvoidArea_968",
+                "type": "str"
+            },
+            {
+                "name": "Adress_green",
+                "value": "00001",
+                "type": "str"
+            },
+            {
+                "name": "Adress_red",
+                "value": "00002",
+                "type": "str"
+            },
+            {
+                "name": "Protocol",
+                "value": "Modbus",
+                "type": "str"
+            }
+        ],
+        "x": 220,
+        "y": 80,
+        "wires": [
+            [
+                "373ba7127c3b396c"
+            ],
+            [
+                "373ba7127c3b396c"
+            ]
+        ],
+        "info": "Determines whether a given zone(s) has a vehicle driving over it or not\r\n\r\nReturns true or false and writes to the correct modbus"
+    },
+    {
+        "id": "32bb108f667fbd8c",
+        "type": "template",
+        "z": "a75fc2e37a329332",
+        "name": "TrafficLightTemplate",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "<div style=\"text-align:center;\">\n    <svg height=\"125\" width=\"50\">\n\n        <!-- Green Light -->\n        <circle id=\"greenLight\" cx=\"25\" cy=\"25\" r=\"20\" stroke=\"black\" stroke-width=\"3\" \n        fill=\"{{payload.greenFill}}\"/>\n\n        <!-- Red Light -->\n        <circle id=\"redLight\" cx=\"25\" cy=\"70\" r=\"20\" stroke=\"black\" stroke-width=\"3\" \n        fill=\"{{payload.redFill}}\" />\n    </svg>\n    <p>{{payload.areaName}}</p>\n\n</div>\n\n",
+        "output": "str",
+        "x": 640,
+        "y": 140,
+        "wires": [
+            [
+                "a525a75829da2122"
+            ]
+        ],
+        "info": "Displays traffic light and changes the fill color based on the input"
+    },
+    {
+        "id": "373ba7127c3b396c",
+        "type": "function",
+        "z": "a75fc2e37a329332",
+        "name": "SetFill",
+        "func": "var greenFill = \"\"\nvar redFill = \"\"\nvar area = env.get(\"Area_Name\")\nif(msg.payload)\n{\n    msg.payload =\n    {\n\n        greenFill: \"transparent\",\n        redFill: \"red\",\n        areaName: area\n\n    }\n\n}\nelse\n{\n    msg.payload =\n    {\n\n        greenFill: \"green\",\n        redFill: \"transparent\",\n        areaName: area\n    \n\n    }\n}\n\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 410,
+        "y": 140,
+        "wires": [
+            [
+                "32bb108f667fbd8c"
+            ]
+        ],
+        "info": "Required to dynamically change the color "
+    },
+    {
+        "id": "16c388ec3d6cf795",
+        "type": "comment",
+        "z": "a75fc2e37a329332",
+        "name": "Create a div in the connected UI builder with id=\"trafficLights\" ",
+        "info": "",
+        "x": 1040,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "a525a75829da2122",
+        "type": "uib-element",
+        "z": "a75fc2e37a329332",
+        "name": "",
+        "topic": "",
+        "elementtype": "html",
+        "parent": "#trafficLights",
+        "parentSource": "#more",
+        "parentSourceType": "str",
+        "elementid": "Area_Name",
+        "elementIdSourceType": "env",
+        "heading": "",
+        "headingSourceType": "str",
+        "headingLevel": "h2",
+        "data": "payload",
+        "dataSourceType": "msg",
+        "position": "last",
+        "positionSourceType": "str",
+        "passthrough": false,
+        "confData": {},
+        "x": 970,
+        "y": 160,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "db09a206249fbc24",
+        "type": "tab",
+        "label": "DemoFlow",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "58e469a5b80fafcb",
+        "type": "group",
+        "z": "db09a206249fbc24",
+        "style": {
+            "stroke": "#999999",
+            "stroke-opacity": "1",
+            "fill": "none",
+            "fill-opacity": "1",
+            "label": true,
+            "label-position": "nw",
+            "color": "#a4a4a4"
+        },
+        "nodes": [
+            "0bcf40ac0c6c3693",
+            "dd691c167f65767e",
+            "17be1a69f5e0dea4",
+            "9620c5bc952a2b82",
+            "2b117c18dd014625",
+            "2ffc6224ea1d3754",
+            "ee7bdb5e46d945d2"
+        ],
+        "x": 754,
+        "y": 719,
+        "w": 892,
+        "h": 342
+    },
+    {
+        "id": "2fc248e35cdc2bb9",
+        "type": "group",
+        "z": "db09a206249fbc24",
+        "name": "Robotcode + Power visualisation",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "8badb65ffa80b562",
+            "9229d42f6b94ddaa",
+            "92e15b1e350bb774",
+            "23ead0814b4350d2"
+        ],
+        "x": 314,
+        "y": 139,
+        "w": 1332,
+        "h": 102
+    },
+    {
+        "id": "0bcf40ac0c6c3693",
+        "type": "http request",
+        "z": "db09a206249fbc24",
+        "g": "58e469a5b80fafcb",
+        "name": "",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "http://10.203.207.88:9003/api/quicktron/rss/warehouse/1/carrier/robots/query",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 850,
+        "y": 860,
+        "wires": [
+            [
+                "dd691c167f65767e",
+                "17be1a69f5e0dea4"
+            ]
+        ],
+        "info": "Queries all the robots"
+    },
+    {
+        "id": "dd691c167f65767e",
+        "type": "function",
+        "z": "db09a206249fbc24",
+        "g": "58e469a5b80fafcb",
+        "name": "ParseAreas",
+        "func": "try {\n    // Parse the incoming JSON response\n    const jsonResponse = JSON.parse(msg.payload);\n\n    // Extract areaCodes from each object in the data array\n    const areaCodesList = jsonResponse.data.reduce((acc, robotData) => {\n        // Check if areaCodeList is an array before spreading\n        if (Array.isArray(robotData.areaCodeList)) {\n            acc.push(...robotData.areaCodeList);\n        }\n        return acc;\n    }, []);\n\n    // Remove duplicate areaCodes using Set\n    const uniqueAreaCodes = [...new Set(areaCodesList)];\n\n    // Create the output message with the list of unique areaCodes\n    msg.payload = uniqueAreaCodes;\n\n    // Return the modified message object\n    return msg;\n\n} catch (error) {\n    // Handle parsing errors\n    msg.payload = {\n        error: \"Error parsing JSON response\"\n    };\n\n    // Return the error message\n    return msg;\n}\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 990,
+        "y": 980,
+        "wires": [
+            [
+                "2b117c18dd014625",
+                "2ffc6224ea1d3754"
+            ]
+        ],
+        "info": "Parses all the unique area codes from the map\r\n\r\n\r\nFixed JSON parsing when AMR is removed from the map\r\n\r\nexample:\r\n[\"AvoidArea_496\",\"ParkingArea_858\",\"LimitArea_714\",\"AvoidArea_477\"]"
+    },
+    {
+        "id": "17be1a69f5e0dea4",
+        "type": "function",
+        "z": "db09a206249fbc24",
+        "g": "58e469a5b80fafcb",
+        "name": "Parse pointCode values",
+        "func": "// Parse the JSON payload\ntry {\n    var payload = JSON.parse(msg.payload);\n} catch (error) {\n    node.error(\"Invalid payload structure\", error);\n    return null\n};\n\n\n// Check if the payload has the expected structure\nif (payload.success && Array.isArray(payload.data) && payload.data.length > 0) {\n    // Extract the \"pointCode\" values from the \"data\" array\n    var pointCodes = payload.data.map(item => item.pointCode);\n\n    // Create a new message object with the extracted \"pointCode\" values\n    msg.payload = pointCodes;\n\n    // Return the modified message\n    return msg;\n} else {\n    // If the payload structure is not as expected, log an error\n    node.error(\"Invalid payload structure\");\n    return null;\n}",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1110,
+        "y": 760,
+        "wires": [
+            [
+                "9620c5bc952a2b82"
+            ]
+        ]
+    },
+    {
+        "id": "9620c5bc952a2b82",
+        "type": "function",
+        "z": "db09a206249fbc24",
+        "g": "58e469a5b80fafcb",
+        "name": "setGlobalVarable",
+        "func": "// Assuming msg.payload contains your pointCodes\nvar pointCodes = msg.payload;\n\n// Set the global variable\nglobal.set(\"pointCodes\", pointCodes);\n\n// You can also log the values for debugging purposes\n//console.log(\"pointCodes:\", pointCodes);\n\n// Pass the message along\nreturn msg;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1390,
+        "y": 760,
+        "wires": [
+            []
+        ],
+        "info": "Parsing code points\r\n\r\nExample:\r\n[\"0568\",\"\",\"0561\",\"0408\",\"0559\",\"0085\"]"
+    },
+    {
+        "id": "2b117c18dd014625",
+        "type": "subflow:a75fc2e37a329332",
+        "z": "db09a206249fbc24",
+        "g": "58e469a5b80fafcb",
+        "name": "",
+        "env": [
+            {
+                "name": "Area_Name",
+                "value": "RobotControlArea_591",
+                "type": "str"
+            },
+            {
+                "name": "Modbus_IP",
+                "value": "127.0.0.1",
+                "type": "str"
+            },
+            {
+                "name": "Address_Green_1",
+                "value": "16",
+                "type": "str"
+            },
+            {
+                "name": "Address_Green_2",
+                "value": "18",
+                "type": "str"
+            },
+            {
+                "name": "Address_Red_1",
+                "value": "17",
+                "type": "str"
+            },
+            {
+                "name": "Address_Red_2",
+                "value": "19",
+                "type": "str"
+            }
+        ],
+        "x": 1260,
+        "y": 940,
+        "wires": [
+            [
+                "60aab0de05875b6c"
+            ]
+        ]
+    },
+    {
+        "id": "2ffc6224ea1d3754",
+        "type": "subflow:a75fc2e37a329332",
+        "z": "db09a206249fbc24",
+        "g": "58e469a5b80fafcb",
+        "name": "",
+        "env": [
+            {
+                "name": "Area_Name",
+                "value": "RobotControlArea_452",
+                "type": "str"
+            },
+            {
+                "name": "Modbus_IP",
+                "value": "127.0.0.1",
+                "type": "str"
+            },
+            {
+                "name": "Address_Green_1",
+                "value": "16",
+                "type": "str"
+            },
+            {
+                "name": "Address_Green_2",
+                "value": "18",
+                "type": "str"
+            },
+            {
+                "name": "Address_Red_1",
+                "value": "17",
+                "type": "str"
+            },
+            {
+                "name": "Address_Red_2",
+                "value": "19",
+                "type": "str"
+            }
+        ],
+        "x": 1260,
+        "y": 1020,
+        "wires": [
+            [
+                "60aab0de05875b6c"
+            ]
+        ]
+    },
+    {
+        "id": "ee7bdb5e46d945d2",
+        "type": "comment",
+        "z": "db09a206249fbc24",
+        "g": "58e469a5b80fafcb",
+        "name": "Add traffic visualizer subflow for every area you want to visualize",
+        "info": "",
+        "x": 1390,
+        "y": 880,
+        "wires": []
+    },
+    {
+        "id": "8badb65ffa80b562",
+        "type": "inject",
+        "z": "db09a206249fbc24",
+        "g": "2fc248e35cdc2bb9",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 420,
+        "y": 200,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "9229d42f6b94ddaa",
+        "type": "template",
+        "z": "db09a206249fbc24",
+        "g": "2fc248e35cdc2bb9",
+        "name": "RobotInfo",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "<div class=\"powerInfo\">\n  <div>\n    <p>{{payload.robotCode}} -- {{payload.state}}</p>\n  </div>\n  <div class=\"progressDiv\" style=\"text-align:center;\">\n  <svg class=\"progress\" height=\"100\" width=\"150\" >\n    \n    <!-- Progress circle -->\n    <circle class=\"progressCircle\"  cx=\"75\" cy=\"50\" r=\"40\" fill=\"none\" stroke=\"#4caf50\" stroke-width=\"10\" stroke-dasharray=\"157 94\">\n      <animate attributeName=\"stroke-dasharray\" values=\"0 251; 157 94\" dur=\"1s\" fill=\"freeze\" />\n    </circle>\n  </svg>\n  <p>{{payload.power}}%</p>\n  </div>\n</div>\n<div class=\"Location\">\n    <p>X Position: {{payload.x}}</p>\n    <p>Y Position: {{payload.y}}</p>\n    <p>Point Code: {{payload.pointCode}}</p>\n</div>\n<div class=\"Move\">\n <p><b>{{payload.robotCode}} Move</b></p>\n\n<form action=\"/submit\" method=\"POST\">\n            <div class=\"form-group\">\n                <input type=\"text\" id=\"StartPosition\" name=\"StartPosition\" placeholder=\"Start Point\" required>\n            </div>\n            <div class=\"form-group\">\n                <input type=\"text\" id=\"EndPosition\" name=\"EndPosition\" placeholder=\"End Point\" required>\n            </div>\n            <div class=\"form-group\">\n                <button type=\"submit\">Start Transport</button>\n            </div>\n</form>\n</div>\n<hr>",
+        "output": "str",
+        "x": 1080,
+        "y": 200,
+        "wires": [
+            [
+                "23ead0814b4350d2"
+            ]
+        ]
+    },
+    {
+        "id": "92e15b1e350bb774",
+        "type": "subflow:458296d889c02e7c",
+        "z": "db09a206249fbc24",
+        "g": "2fc248e35cdc2bb9",
+        "name": "RobotValues",
+        "x": 850,
+        "y": 200,
+        "wires": [
+            [
+                "9229d42f6b94ddaa"
+            ],
+            [
+                "1eb7caff96c0ef2a"
+            ]
+        ]
+    },
+    {
+        "id": "4a0e11ab528b556d",
+        "type": "link in",
+        "z": "db09a206249fbc24",
+        "name": "ShowAll",
+        "links": [
+            "cd8df4f910336d14",
+            "977e3bdf021428b3",
+            "6cfa1076e6580ae6"
+        ],
+        "x": 315,
+        "y": 520,
+        "wires": [
+            [
+                "92e15b1e350bb774"
+            ]
+        ]
+    },
+    {
+        "id": "0058c53c1f05cca8",
+        "type": "inject",
+        "z": "db09a206249fbc24",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 920,
+        "y": 380,
+        "wires": [
+            [
+                "cd8df4f910336d14"
+            ]
+        ]
+    },
+    {
+        "id": "cd8df4f910336d14",
+        "type": "link out",
+        "z": "db09a206249fbc24",
+        "name": "ShowAllIn",
+        "mode": "link",
+        "links": [
+            "4a0e11ab528b556d"
+        ],
+        "x": 1225,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "be78506b48659c00",
+        "type": "inject",
+        "z": "db09a206249fbc24",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 880,
+        "y": 1300,
+        "wires": [
+            [
+                "0bcf40ac0c6c3693"
+            ]
+        ]
+    },
+    {
+        "id": "23ead0814b4350d2",
+        "type": "uib-element",
+        "z": "db09a206249fbc24",
+        "g": "2fc248e35cdc2bb9",
+        "name": "",
+        "topic": "",
+        "elementtype": "html",
+        "parent": "#vehicles",
+        "parentSource": "",
+        "parentSourceType": "str",
+        "elementid": "flow.get(\"currentRobot\")",
+        "elementId": "",
+        "elementIdSourceType": "jsonata",
+        "heading": "",
+        "headingSourceType": "str",
+        "headingLevel": "h2",
+        "data": "payload",
+        "dataSourceType": "msg",
+        "position": "first",
+        "positionSourceType": "str",
+        "passthrough": false,
+        "confData": {},
+        "x": 1460,
+        "y": 180,
+        "wires": [
+            [
+                "5780b9f21f17104f"
+            ]
+        ]
+    },
+    {
+        "id": "5780b9f21f17104f",
+        "type": "uibuilder",
+        "z": "db09a206249fbc24",
+        "name": "",
+        "topic": "",
+        "url": "Robot-Control",
+        "okToGo": true,
+        "fwdInMessages": true,
+        "allowScripts": false,
+        "allowStyles": false,
+        "copyIndex": true,
+        "templateFolder": "blank",
+        "extTemplate": "",
+        "showfolder": false,
+        "reload": false,
+        "sourceFolder": "src",
+        "deployedVersion": "6.8.2",
+        "showMsgUib": false,
+        "title": "",
+        "descr": "",
+        "x": 1730,
+        "y": 640,
+        "wires": [
+            [],
+            []
+        ]
+    },
+    {
+        "id": "60aab0de05875b6c",
+        "type": "uibuilder",
+        "z": "db09a206249fbc24",
+        "name": "",
+        "topic": "",
+        "url": "External-Controls",
+        "okToGo": true,
+        "fwdInMessages": false,
+        "allowScripts": false,
+        "allowStyles": false,
+        "copyIndex": true,
+        "templateFolder": "blank",
+        "extTemplate": "",
+        "showfolder": false,
+        "reload": false,
+        "sourceFolder": "src",
+        "deployedVersion": "6.8.2",
+        "showMsgUib": false,
+        "title": "",
+        "descr": "",
+        "x": 1920,
+        "y": 1260,
+        "wires": [
+            [],
+            []
+        ]
+    },
+    {
+        "id": "1eb7caff96c0ef2a",
+        "type": "uib-sender",
+        "z": "db09a206249fbc24",
+        "url": "Robot-Control",
+        "uibId": "5780b9f21f17104f",
+        "name": "",
+        "topic": "clear",
+        "passthrough": false,
+        "return": false,
+        "outputs": 0,
+        "x": 1080,
+        "y": 280,
+        "wires": []
+    }
+]
