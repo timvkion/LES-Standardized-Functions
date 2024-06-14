@@ -1,0 +1,178 @@
+[
+    {
+        "id": "62b32a35bd6ff74c",
+        "type": "tab",
+        "label": "GetExtraPackages",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "c5cfb79ac2e1ce31",
+        "type": "debug",
+        "z": "62b32a35bd6ff74c",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1290,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "8edf398dcbd352e3",
+        "type": "http request",
+        "z": "62b32a35bd6ff74c",
+        "name": "",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "https://api.github.com/repos/timvkion/LES-Standardized-Functions/contents/LES-Standardized-Functions/package.json",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "basic",
+        "senderr": false,
+        "headers": [
+            {
+                "keyType": "other",
+                "keyValue": "Accept",
+                "valueType": "other",
+                "valueValue": "application/vnd.github+json"
+            },
+            {
+                "keyType": "other",
+                "keyValue": "Authorization",
+                "valueType": "other",
+                "valueValue": "Bearer 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"
+            },
+            {
+                "keyType": "other",
+                "keyValue": "X-GitHub-Api-Version",
+                "valueType": "other",
+                "valueValue": "2022-11-28"
+            }
+        ],
+        "x": 390,
+        "y": 280,
+        "wires": [
+            [
+                "61daa8b3b2a92010"
+            ]
+        ]
+    },
+    {
+        "id": "757b8dfcc61af5bf",
+        "type": "inject",
+        "z": "62b32a35bd6ff74c",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 220,
+        "y": 280,
+        "wires": [
+            [
+                "8edf398dcbd352e3"
+            ]
+        ]
+    },
+    {
+        "id": "61daa8b3b2a92010",
+        "type": "json",
+        "z": "62b32a35bd6ff74c",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 550,
+        "y": 280,
+        "wires": [
+            [
+                "4c11daec0aa5c955"
+            ]
+        ]
+    },
+    {
+        "id": "4c11daec0aa5c955",
+        "type": "function",
+        "z": "62b32a35bd6ff74c",
+        "name": "content",
+        "func": "msg.payload = msg.payload.content\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 700,
+        "y": 280,
+        "wires": [
+            [
+                "8414dbaea722be24"
+            ]
+        ]
+    },
+    {
+        "id": "8414dbaea722be24",
+        "type": "base64",
+        "z": "62b32a35bd6ff74c",
+        "name": "",
+        "action": "b64",
+        "property": "payload",
+        "x": 860,
+        "y": 280,
+        "wires": [
+            [
+                "ff3961da56b24057"
+            ]
+        ]
+    },
+    {
+        "id": "486e9fa8385e6972",
+        "type": "comment",
+        "z": "62b32a35bd6ff74c",
+        "name": "Get latest extra libraries content from github and overwrites the local version",
+        "info": "",
+        "x": 410,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "ff3961da56b24057",
+        "type": "file",
+        "z": "62b32a35bd6ff74c",
+        "name": "",
+        "filename": "/root/.node-red/package.json",
+        "filenameType": "str",
+        "appendNewline": true,
+        "createDir": false,
+        "overwriteFile": "true",
+        "encoding": "none",
+        "x": 1060,
+        "y": 280,
+        "wires": [
+            [
+                "c5cfb79ac2e1ce31"
+            ]
+        ]
+    }
+]
